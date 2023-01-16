@@ -24,7 +24,7 @@ for i in range(len(read_lines)): # Looping through every line in .txt file
 new_file = open("earthquakefmt.txt", "w")
 for i in range(len(earthquake_results)):
     new_file.write(str(earthquake_results[i]))
-    new_file.wrute("\n")
+    new_file.write("\n")
 
 new_file.close()
 
