@@ -15,8 +15,8 @@ It uses the paramater filename to decrypt each message.
 
 def decrypt(filename):
     file = open(filename, "r")
-    alpha = int(file.readline().strip())
-    encrypted = file.readline().strip()
+    alpha = int(file.readline().strip()) # Reads the first line of the txt file
+    encrypted = file.readline().strip() # Reads the second line of the txt file
     file.close()
     words = encrypted.strip()
     decrypted_msg = ""
