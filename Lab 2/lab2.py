@@ -22,13 +22,13 @@ def decrypt(filename):
     decrypted_msg = ""
     alpha = alpha % 26
     for word in words:
-        for ch in word.lower():
-            if "a" <= ch <= "z":
-                ascii = ord(ch) - alpha
+        for character in word.lower():
+            if "a" <= character <= "z":
+                ascii = ord(character) - alpha
                 if ascii < ord("a"):
                     ascii = ord("z") - (ord("a") - ascii - 1)
-                ch = chr(ascii)
-            decrypted_msg += ch
+                character = chr(ascii)
+            decrypted_msg += character
         decrypted_msg += ""
     return decrypted_msg.strip()
 
