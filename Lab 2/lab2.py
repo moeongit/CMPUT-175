@@ -4,7 +4,7 @@ This function gets the input of a filename from a user abd returns filename.
 
 def getInputFile():
     filename = input("Enter the input filename: ")
-    while filename[-4:] != ".txt":
+    while filename[-4:] != ".txt": # Checks the last 4 characters of the user's desired input. If it does not end in .txt the following happens
         filename = input("Invalid filename extension. Please re-enter the input filename: ")
     return filename
 
