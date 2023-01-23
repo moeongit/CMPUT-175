@@ -48,22 +48,19 @@ def parse_matches(filepath):
 def parse_cards(filepath):
     cards = []
     with codecs.open(filepath, 'r', 'utf-8') as f:
-        for line in f:
+        for i, line in enumerate(f):
             fields = line.strip().split(";")
-            match = fields[0]
-            country = fields[1]
-            name = fields[2]
-            card_type = fields[3]
-            time = fields[4]
-            cards.append({
-                "match": match,
-                "country": country,
-                "name": name,
-                "type": card_type,
-                "time": time
-            })
-    return cards
+            if len(fields) == 5:
+                match, country, name, card_type, time = fields
+                cards.append({
+                    "match": match,
+                    "country": country,
+                    "name": name,
+                    "type": card_type,
+                    "time": time
+                })
 
+    return cards
 
 players = parse_players("WC22Footballers.txt")
 matches = parse_matches("WC22GroupMatches.txt")
