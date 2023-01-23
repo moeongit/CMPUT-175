@@ -15,16 +15,16 @@ It uses the paramater filename to decrypt each message.
 
 def decrypt(filename):
     file = open(filename, "r")
-    alpha = int(file.readline().strip()) # Reads the first line of the txt file
+    shift_number = int(file.readline().strip()) # Reads the first line of the txt file
     encrypted = file.readline().strip() # Reads the second line of the txt file
     file.close()
     words = encrypted.strip()
     decrypted_msg = ""
-    alpha = alpha % 26
+    shift_number = shift_number % 26
     for word in words:
         for character in word.lower():
             if "a" <= character <= "z":
-                ascii = ord(character) - alpha
+                ascii = ord(character) - shift_number
                 if ascii < ord("a"):
                     ascii = ord("z") - (ord("a") - ascii - 1)
                 character = chr(ascii)
