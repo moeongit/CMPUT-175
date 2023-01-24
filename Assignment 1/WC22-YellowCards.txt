@@ -168,5 +168,5 @@ Ghana-Uruguay;Urugway;Sebastian COATES;Y;87
 Ghana-Uruguay;Ghana;Seidu ALIDU;Y;90+9
 Ghana-Uruguay;Urugway;Jose GIMENEZ;Y;90+10
 Ghana-Uruguay;Urugway;Edinson CAVANI;Y;90+10
-Sout Korea-Portugal;South Korea;LEE Kangin;Y;36
-Sout Korea-Portugal;South Korea;HWANG Heechan;Y;90+2
+South Korea-Portugal;South Korea;LEE Kangin;Y;36
+South Korea-Portugal;South Korea;HWANG Heechan;Y;90+2
