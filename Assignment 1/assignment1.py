@@ -1,14 +1,14 @@
 import codecs
 
-def parse_players(filepath):
+def players(filename):
     players = []
-    with codecs.open(filepath, 'r', 'utf-8') as f:
-        for line in f:
-            fields = line.strip().split(";")
-            country_number = fields[0]
-            position = fields[1]
-            name = fields[2]
-            dob, age = fields[3].split(" (")
+    with codecs.open(filename, 'r', 'utf-8') as file:
+        for line in file:
+            stats = line.strip().split(";")
+            country_number = stats[0]
+            position = stats[1]
+            name = stats[2]
+            dob, age = stats[3].split(" (")
             age = age.strip("aged ").strip(")")
             number = country_number[-2:]
             country = country_number[:-3]
@@ -22,17 +22,17 @@ def parse_players(filepath):
             })
     return players
 
-def parse_matches(filepath):
+def matches(filename):
     matches = []
-    with codecs.open(filepath, 'r', 'utf-8') as f:
-        for line in f:
-            fields = line.strip().split(";")
-            if fields[0] and fields[1] and fields[2] and fields[3] and fields[4]:
-                group = fields[0]
-                team1 = fields[1]
-                team2 = fields[2]
-                scores = fields[3]
-                date = fields[4]
+    with codecs.open(filename, 'r', 'utf-8') as file:
+        for line in file:
+            stats = line.strip().split(";")
+            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
+                group = stats[0]
+                team1 = stats[1]
+                team2 = stats[2]
+                scores = stats[3]
+                date = stats[4]
                 team1_scores = scores.split(")(")[0].strip("(")
                 team2_scores = scores.split(")(")[1].strip(")")
                 matches.append({
@@ -45,13 +45,13 @@ def parse_matches(filepath):
                 })
     return matches
 
-def parse_cards(filepath):
+def cards(filename):
     cards = []
-    with codecs.open(filepath, 'r', 'utf-8') as f:
-        for i, line in enumerate(f):
-            fields = line.strip().split(";")
-            if len(fields) == 5:
-                match, country, name, card_type, time = fields
+    with codecs.open(filename, 'r', 'utf-8') as file:
+        for i, line in enumerate(file):
+            stats = line.strip().split(";")
+            if len(stats) == 5:
+                match, country, name, card_type, time = stats
                 cards.append({
                     "match": match,
                     "country": country,
@@ -62,9 +62,9 @@ def parse_cards(filepath):
 
     return cards
 
-players = parse_players("WC22Footballers.txt")
-matches = parse_matches("WC22GroupMatches.txt")
-cards = parse_cards("WC22-YellowCards.txt")
+players = players("WC22Footballers.txt")
+matches = matches("WC22GroupMatches.txt")
+cards = cards("WC22-YellowCards.txt")
 print(players)
 print(matches)
 print(cards)
