@@ -62,9 +62,32 @@ def cards(filename):
 
     return cards
 
+def write_groups(filepath, matches):
+    groups = {}
+    for match in matches:
+        group = match["group"]
+        team1 = match["team1"]
+        team2 = match["team2"]
+        if group not in groups:
+            groups[group] = set()
+        groups[group].add(team1)
+        groups[group].add(team2)
+    with open(filepath, "w") as f:
+        for group, countries in sorted(groups.items()):
+            f.write("Group {}\n".format(group))
+            for country in sorted(countries):
+                f.write("{}\n".format(country))
+            f.write("\n")
+
+# def knockout_teams(filename):
+#     knockout_teams = []
+#     with codecs.open(filename, )
+
+
 players = players("WC22Footballers.txt")
 matches = matches("WC22GroupMatches.txt")
 cards = cards("WC22-YellowCards.txt")
+groups = write_groups("groups.txt", matches)
 print(players)
 print(matches)
 print(cards)
