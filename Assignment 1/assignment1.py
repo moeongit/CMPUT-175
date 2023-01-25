@@ -2,7 +2,7 @@ import codecs
 
 def players(filename):
     players = []
-    with codecs.open(filename, 'r', 'utf-8') as file:
+    with codecs.open(filename, "r", "utf-8") as file:
         for line in file:
             stats = line.strip().split(";")
             country_number = stats[0].split(" ")
@@ -25,7 +25,7 @@ def players(filename):
 
 def matches(filename):
     matches = []
-    with codecs.open(filename, 'r', 'utf-8') as file:
+    with codecs.open(filename, "r", "utf-8") as file:
         for line in file:
             stats = line.strip().split(";")
             if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
@@ -48,7 +48,7 @@ def matches(filename):
 
 def cards(filename):
     cards = []
-    with codecs.open(filename, 'r', 'utf-8') as file:
+    with codecs.open(filename, "r", "utf-8") as file:
         for i, line in enumerate(file):
             stats = line.strip().split(";")
             if len(stats) == 5:
@@ -79,9 +79,9 @@ def write_groups(filename, matches):
                 file.write("{}\n".format(country))
             file.write("\n")
 
-def average_age(players_func):
+def average_age(players_function):
     teams = {}
-    for player in players_func:
+    for player in players_function:
         team = player["country"]
         age = int(player["age"])
         if team not in teams:
@@ -101,9 +101,9 @@ def average_age(players_func):
             f.write("{:<12}".format(team) + "{:.2f}".format(age) + " years\n") 
         f.write("\nAverage Overall " + "{:.2f}".format(total_age/total_players) + " years")
 
-def histogram(players_func):
+def histogram(players_function):
     ages = {}
-    for player in players_func:
+    for player in players_function:
         age = int(player["age"])
         if age not in ages:
             ages[age] = 0
@@ -138,19 +138,14 @@ def most_yellow_cards(cards):
         file.write(match_name + "\n")
         for country, count in match_card_count[max_match].items():
             file.write(f"{country}: {count} YC\n")
-        # print(match_name + "\n")
-        # for country, count in match_card_count[max_match].items():
-        #     print(f"{country}: {count} YC")
+ 
 
 def main():
-    players_func = players("WC22Footballers.txt")
-    matches_func = matches("WC22GroupMatches.txt")
-    cards_func = cards("WC22-YellowCards.txt")
-    groups = write_groups("groups.txt", matches_func)
-    ages = average_age(players_func)
-    stars = histogram(players_func)
-    most_yellow_cards(cards_func)
-    # print(players_func)
-    # print(matches_func)
-    # print(cards_func)
+    players_function = players("WC22Footballers.txt")
+    matches_function = matches("WC22GroupMatches.txt")
+    cards_function = cards("WC22-YellowCards.txt")
+    groups = write_groups("groups.txt", matches_function)
+    ages = average_age(players_function)
+    stars = histogram(players_function)
+    most_yellow_cards(cards_function)
 main()
