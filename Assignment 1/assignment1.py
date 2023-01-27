@@ -22,7 +22,6 @@ def players(filename):
             })
     return players
 
-
 def matches(filename):
     matches = []
     with codecs.open(filename, "r", "utf-8") as file:
@@ -89,7 +88,7 @@ def average_age(players_function):
         teams[team]["players"] += 1
         teams[team]["age"] += age
     for team in teams.keys():
-        teams[team]["average_age"] = round(teams[team]["age"] / teams[team]["players"], 2)
+        teams[team]["average_age"] = round(teams[team]["age"]/teams[team]["players"], 2)
     with open("ages.txt", "w", encoding="utf-8") as f:
         total_players = 0
         total_age = 0

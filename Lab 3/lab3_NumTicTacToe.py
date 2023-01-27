@@ -39,8 +39,8 @@ class NumTicTacToe:
         # 1    |   |   
         #   -----------
         # 2    |   |           
-        
-        pass
+
+
 
 
     def squareIsEmpty(self, row, col):
