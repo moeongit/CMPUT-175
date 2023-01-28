@@ -53,20 +53,20 @@ class NumTicTacToe:
 
     def isWinner(self):
         for i in range(self.size):
-            rowSum = 0
-            colSum = 0
+            sum_of_col = 0
+            sum_of_row = 0
             for j in range(self.size):
-                rowSum += self.board[i][j]
-                colSum += self.board[j][i]
-            if rowSum == 15 or colSum == 15:
+                sum_of_row += self.board[i][j]
+                sum_of_col += self.board[j][i]
+            if sum_of_row == 15 or sum_of_col == 15:
                 return True
-        lDiag = 0
-        rDiag = 0
+        right_diagonal = 0
+        left_diagonal = 0
         n = self.size - 1
         for i in range(self.size):
-            lDiag += self.board[i][i]
-            rDiag += self.bard[i][n - i]
-        if lDiag == 15 or rDiag == 15:
+            left_diagonal += self.board[i][i]
+            right_diagonal += self.bard[i][n - i]
+        if left_diagonal == 15 or right_diagonal == 15:
             return True
         return False
 
