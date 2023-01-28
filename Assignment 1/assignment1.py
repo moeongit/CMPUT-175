@@ -88,7 +88,7 @@ def average_age(players_function):
         teams[team]["players"] += 1
         teams[team]["age"] += age
     for team in teams.keys():
-        teams[team]["average_age"] = round(teams[team]["age"]/teams[team]["players"], 2)
+        teams[team]["average_age"] = round(teams[team]["age"] / teams[team]["players"], 2)
     with open("ages.txt", "w", encoding="utf-8") as f:
         total_players = 0
         total_age = 0
@@ -137,7 +137,7 @@ def most_yellow_cards(cards):
         file.write(match_name + "\n")
         for country, count in match_card_count[max_match].items():
             file.write(f"{country}: {count} YC\n")
- 
+
 
 def main():
     players_function = players("WC22Footballers.txt")

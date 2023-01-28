@@ -22,22 +22,16 @@ class NumTicTacToe:
         Inputs: none
         :return: none
         """
-        # print row indices
         print("\n ", end="")
         for i in range(self.size):
             print("  ", i, end="")
-        # print board cells
         for i in range(self.size):
-            # print column index
             print("\n", i, " ", end="")
             for j in range(self.size):
-                # print cell value
                 print(self.board[i][j], end=" ")
                 if (j + 1) != self.size:
-                    # print column separator
                     print("|", end=' ')
             if (i + 1) != self.size:
-                # print row separator
                 print("\n   -----------", end="")
         print()
 
@@ -45,29 +39,19 @@ class NumTicTacToe:
         return True if self.board[row][col] == 0 else False
 
     def update(self, row, col, num):
-        # check if square is empty
         if self.squareIsEmpty(row, col):
-            # set square to num
             self.board[row][col] = num
-            # return true to indicate success
             return True
-        # return false to indicate failure
         return False
 
     def boardFull(self):
-        # for each row
         for i in range(self.size):
-            # for each column
             for j in range(self.size):
-                # check if cell is empty
                 if self.board[i][j] == 0:
-                    # return false to indicate board is not full
                     return False
-        # return True to indicate board if full
         return True
 
     def isWinner(self):
-        # row & column checks
         for i in range(self.size):
             rowSum = 0
             colSum = 0
@@ -76,27 +60,19 @@ class NumTicTacToe:
                 colSum += self.board[j][i]
             if rowSum == 15 or colSum == 15:
                 return True
-        # diagonal checks
         lDiag = 0
         rDiag = 0
         n = self.size - 1
         for i in range(self.size):
             lDiag += self.board[i][i]
-            rDiag += self.board[i][n - i]
+            rDiag += self.bard[i][n - i]
         if lDiag == 15 or rDiag == 15:
             return True
-        # return false to indicate not a winner
         return False
-
 
 if __name__ == "__main__":
     board = NumTicTacToe()
-    # print("Contents of board attribute when object first created")
-    # print(myBoard.board)
-
-    # draw board
     board.drawBoard()
-    # player identifier
     player = 0
     while not board.isWinner() and not board.boardFull():
         player = (player % 2) + 1
@@ -111,12 +87,12 @@ if __name__ == "__main__":
             if board.update(row, col, num):
                 break
             else:
-                print("That position is not empty. Choose another spot please.")
+                print("That spot is filled. Please select another spot.")
         board.drawBoard()
         if board.isWinner():
-            print("Player ", player, " wins. Congrats!")
+            print(f"Player {player} wins. Congratulations!")
             choice = input("Do you want to play another game? (Y/N): ")
             if choice.lower() == "y":
                 board = NumTicTacToe()
             else:
-                print("Thank you for playing.") 
+                print("Thanks for playing TicTacToe.") 
