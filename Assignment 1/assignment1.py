@@ -13,13 +13,8 @@ def players(filename):
             dob, age = stats[3].split(" (")
             age = age.strip("aged ").strip(")")
             players.append({
-                "country": country,
-                "number": number,
-                "position": position,
-                "name": name,
-                "dob": dob,
-                "age": age
-            })
+                "country": country, "number": number, "position": position,
+                "name": name, "dob": dob, "age": age})
     return players
 
 def matches(filename):
@@ -35,14 +30,8 @@ def matches(filename):
                 date = stats[4]
                 team1_scores = scores.split(")(")[0].strip("(")
                 team2_scores = scores.split(")(")[1].strip(")")
-                matches.append({
-                    "group": group,
-                    "team1": team1,
-                    "team2": team2,
-                    "team1_scores": team1_scores,
-                    "team2_scores": team2_scores,
-                    "date": date
-                })
+                matches.append({"group": group, "team1": team1, "team2": team2, 
+                    "team1_scores": team1_scores, "team2_scores": team2_scores, "date": date})
     return matches
 
 def cards(filename):
@@ -52,13 +41,7 @@ def cards(filename):
             stats = line.strip().split(";")
             if len(stats) == 5:
                 match, country, name, card_type, time = stats
-                cards.append({
-                    "match": match,
-                    "country": country,
-                    "name": name,
-                    "type": card_type,
-                    "time": time
-                })
+                cards.append({"match": match, "country": country, "name": name, "type": card_type, "time": time})
     return cards
 
 def write_groups(filename, matches):
@@ -138,51 +121,6 @@ def most_yellow_cards(cards):
         for country, count in match_card_count[max_match].items():
             file.write(f"{country}: {count} YC\n")
 
-def knockout_stage(matches, output_file):
-    # Create a dictionary to store the points for each country
-    points = {}
-    # Iterate through each match
-    for match in matches:
-        home, away, score = match.strip().split(" ")
-        home_goals, away_goals = score.split(":")
-        # Check if the home team won
-        if home_goals > away_goals:
-            # Add 3 points to the home team
-            if home in points:
-                points[home] += 3
-            else:
-                points[home] = 3
-        # Check if the away team won
-        elif home_goals < away_goals:
-            # Add 3 points to the away team
-            if away in points:
-                points[away] += 3
-            else:
-                points[away] = 3
-        # If it was a draw
-        else:
-            # Add 1 point to both teams
-            if home in points:
-                points[home] += 1
-            else:
-                points[home] = 1
-            if away in points:
-                points[away] += 1
-            else:
-                points[away] = 1
-
-    # Sort the dictionary by key (country name)
-    sorted_points = dict(sorted(points.items()))
-    # Open the output file
-    with open(output_file, "w") as f:
-        # Write the country and points to the file
-        for country, point in sorted_points.items():
-            f.write(f"{country:<12} {point} pts\n")
-    # Print the list to the console
-    for country, point in sorted_points.items():
-        print(f"{country:<12} {point} pts")
-
-
 
 def main():
     players_function = players("WC22Footballers.txt")
@@ -192,5 +130,4 @@ def main():
     ages = average_age(players_function)
     stars = histogram(players_function)
     most_yellow_cards(cards_function)
-    knockout_stage(matches_function, "knockout.txt")
 main()
