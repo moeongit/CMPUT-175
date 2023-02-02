@@ -90,13 +90,13 @@ def histogram(players_function):
         if age not in ages:
             ages[age] = 0
         ages[age] += 1
-    with open("histogram.txt", "w", encoding="utf-8") as f:
+    with open("histogram.txt", "w", encoding="utf-8") as file:
         for age in range(18, 41):
             if age in ages:
                 stars = round(ages[age]/5)
                 if stars == 0:
                     stars = 1
-                f.write("{} years ({:2d}){}\n".format(age, ages[age],'*' * stars))
+                file.write("{} years ({:2d}){}\n".format(age, ages[age],'*' * stars))
 
 def most_yellow_cards(cards):
     match_card_count = {}
@@ -134,9 +134,9 @@ def player_most_goals(filename):
                 team2_scores = scores.split(")(")[1].strip(")")
                 # matches.append({"group": group, "team1": team1, "team2": team2, 
                 #     "team1_scores": team1_scores, "team2_scores": team2_scores, "date": date})
-                print(team1_scores)
-                print(team2_scores)
-
+        with open("scorers.txt", "w") as file:
+            file.write(team1_scores)
+            file.write(team2_scores)
     return matches
 
 
