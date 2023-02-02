@@ -27,7 +27,9 @@ def goToNewSite(current, pages):
     Returns: ?
     '''   
     # TO DO: delete pass and write your code here
-    pass
+    enter_url = input("Enter URL: ")
+    pages.append(enter_url)
+    return len(pages) - 1
 
     
 def goBack(current, pages):
@@ -37,8 +39,9 @@ def goBack(current, pages):
     Returns: ?
     '''    
     # TO DO: delete pass and write your code here
-    pass
-
+    if current == 0:
+        print("Cannot go back.")
+    return current - 1
 
 def goForward(current, pages):
     '''
@@ -47,7 +50,10 @@ def goForward(current, pages):
     Returns: str
     '''    
     # TO DO: delete pass and write your code here
-
+    if current < len(pages) - 1:
+        return current + 1
+    else:
+        print("Cannot go forward.")
 
 
 def main():
