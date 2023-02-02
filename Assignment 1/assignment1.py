@@ -121,6 +121,25 @@ def most_yellow_cards(cards):
         for country, count in match_card_count[max_match].items():
             file.write(f"{country}: {count} YC\n")
 
+def player_most_goals(filename):
+    matches = []
+    with codecs.open(filename, "r", "utf-8") as file:
+        for line in file:
+            stats = line.strip().split(";")
+            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
+                team1 = stats[1]
+                team2 = stats[2]
+                scores = stats[3]
+                team1_scores = scores.split(")(")[0].strip("(")
+                team2_scores = scores.split(")(")[1].strip(")")
+                # matches.append({"group": group, "team1": team1, "team2": team2, 
+                #     "team1_scores": team1_scores, "team2_scores": team2_scores, "date": date})
+                print(team1_scores)
+                print(team2_scores)
+
+    return matches
+
+
 
 def main():
     players_function = players("WC22Footballers.txt")
@@ -130,4 +149,5 @@ def main():
     ages = average_age(players_function)
     stars = histogram(players_function)
     most_yellow_cards(cards_function)
+    player_most_goals("WC22GroupMatches.txt")
 main()
