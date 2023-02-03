@@ -1,6 +1,6 @@
 #----------------------------------------------------
 # Lab 4: Web browser simulator
-# Purpose of program:
+# Purpose of program: This program acts as a webbrowser in the sense that you can choose to type a url and go back or forward with the home webpage being www.cs.ualberta.ca.
 #
 # Author: Mohammed Al Robiay
 # Collaborators/references:
@@ -23,8 +23,8 @@ def getAction():
 def goToNewSite(current, pages):
     '''
     Write docstring to describe function
-    Inputs: ?
-    Returns: ?
+    Inputs: int, list
+    Returns: int
     '''   
     # TO DO: delete pass and write your code here
     enter_url = input("Enter URL: ")
@@ -35,25 +35,26 @@ def goToNewSite(current, pages):
 def goBack(current, pages):
     '''
     Write docstring to describe function
-    Inputs: ?
-    Returns: ?
+    Inputs: list, int
+    Returns: int
     '''    
     # TO DO: delete pass and write your code here
     if current == 0:
         print("Cannot go back.")
+        return current
     return current - 1
 
 def goForward(current, pages):
     '''
     Write docstring to describe function
-    Inputs: None
-    Returns: str
+    Inputs: list, int
+    Returns: int
     '''    
     # TO DO: delete pass and write your code here
-    if current < len(pages) - 1:
-        return current + 1
-    else:
+    if current == len(pages) - 1:
         print("Cannot go forward.")
+        return current
+    return current + 1
 
 
 def main():
