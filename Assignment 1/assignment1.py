@@ -57,9 +57,13 @@ def write_groups(filename, matches):
     with open(filename, "w") as file:
         for group, countries in sorted(groups.items()):
             file.write("Group {}\n".format(group))
+            print("Group {}".format(group))
             for country in sorted(countries):
                 file.write("{}\n".format(country))
+                print("{}".format(country))
             file.write("\n")
+            print("")
+
 
 def average_age(players_function):
     teams = {}
@@ -81,7 +85,9 @@ def average_age(players_function):
             total_players += players
             total_age += age * players
             f.write("{:<12}".format(team) + "{:.2f}".format(age) + " years\n") 
+            print("{:<12}".format(team) + "{:.2f}".format(age) + " years") 
         f.write("\nAverage Overall " + "{:.2f}".format(total_age/total_players) + " years")
+        print("\nAverage Overall " + "{:.2f}".format(total_age/total_players) + " years\n")
 
 def histogram(players_function):
     ages = {}
@@ -97,6 +103,58 @@ def histogram(players_function):
                 if stars == 0:
                     stars = 1
                 file.write("{} years ({:2d}){}\n".format(age, ages[age],'*' * stars))
+                print("{} years ({:2d}){}".format(age, ages[age],'*' * stars))
+
+# def player_most_goals(filename):
+#     matches = []
+#     goals = []
+#     with codecs.open(filename, "r", "utf-8") as file:
+#         for line in file:
+#             stats = line.strip().split(";")
+#             if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
+#                 team1 = stats[1]
+#                 team2 = stats[2]
+#                 scores = stats[3]
+#                 team1_scores = scores.split(")(")[0].strip("(")
+#                 team2_scores = scores.split(")(")[1].strip(")")
+#                 matches.append({"team1": team1, "team2": team2, 
+#                     "team1_scores": team1_scores, "team2_scores": team2_scores})
+#                 goals.append(team1_scores)
+#                 goals.append(team2_scores)
+#     with open("scorers.txt", "w", encoding="utf-8") as file:
+#         for i in range(len(goals)):
+#             file.write(goals[i] + "\n")
+
+
+#         return matches
+
+def player_most_goals(filename):
+    matches = []
+    goals = []
+    with open(filename, "r", encoding="utf-8") as file:
+        for line in file:
+            stats = line.strip().split(";")
+            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
+                team1 = stats[1]
+                team2 = stats[2]
+                scores = stats[3]
+                team1_scores = scores.split(")(")[0].strip("(")
+                team2_scores = scores.split(")(")[1].strip(")")
+                matches.append({"team1": team1, "team2": team2, 
+                    "team1_scores": team1_scores, "team2_scores": team2_scores})
+                goals.append(team1_scores)
+                goals.append(team2_scores)
+
+    players_list = player_most_goals(goals)
+    with open("scorers.txt", "w", encoding="utf-8") as f:
+        goals_scored = 0
+        for player in players_list:
+            if player["goals"] > goals_scored:
+                goals_scored = player["goals"]
+                f.write("+-------+--------------+-------------------------+\n")
+                f.write("|{:<5}| {:<12}  | {:<23}|\n".format(str(goals_scored) + " goals", player["country"], player["name"]))
+            elif player["goals"] == goals_scored:
+                f.write("|{:<5}| {:<12}  | {:<23}|\n".format("", player["country"], player["name"]))
 
 def most_yellow_cards(cards):
     match_card_count = {}
@@ -118,27 +176,10 @@ def most_yellow_cards(cards):
     match_name = " vs ".join(match_name)
     with open("yellow.txt", "w") as file:
         file.write(match_name + "\n")
+        print(f"\n{match_name}")
         for country, count in match_card_count[max_match].items():
             file.write(f"{country}: {count} YC\n")
-
-def player_most_goals(filename):
-    matches = []
-    with codecs.open(filename, "r", "utf-8") as file:
-        for line in file:
-            stats = line.strip().split(";")
-            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
-                team1 = stats[1]
-                team2 = stats[2]
-                scores = stats[3]
-                team1_scores = scores.split(")(")[0].strip("(")
-                team2_scores = scores.split(")(")[1].strip(")")
-                # matches.append({"group": group, "team1": team1, "team2": team2, 
-                #     "team1_scores": team1_scores, "team2_scores": team2_scores, "date": date})
-        with open("scorers.txt", "w") as file:
-            file.write(team1_scores)
-            file.write(team2_scores)
-    return matches
-
+            print(f"{country}: {count} YC")
 
 
 def main():
@@ -149,5 +190,4 @@ def main():
     ages = average_age(players_function)
     stars = histogram(players_function)
     most_yellow_cards(cards_function)
-    player_most_goals("WC22GroupMatches.txt")
 main()
