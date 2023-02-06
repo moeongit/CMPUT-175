@@ -1,3 +1,8 @@
+# This program reads text files (data) from the 2022 World Cup and generates text files based on that data.
+# The players function goes through the footballers text function and finds the info of the player
+# The same is done for the matches function and the cards function
+# I stuck to simple programming here so comments werent really necessary in most spots. I used split and strip and appended things to a list and made most things clean
+
 import codecs
 
 def players(filename):
@@ -64,49 +69,6 @@ def write_groups(filename, matches):
             file.write("\n")
             print("")
 
-def write_knockout(knockout_teams, output_file):
-    with open(output_file, 'w') as file:
-        for team in knockout_teams:
-            file.write(team[0] + ' ' + str(team[1]) + ' pts' + '\n')
-
-
-def knockout_stage(filepath, matches):
-    teams = {}
-    for match in matches:
-        team1 = match["team1"]
-        team2 = match["team2"]
-        team1_scores = match["team1_scores"]
-        team2_scores = match["team2_scores"]
-
-        if team1 not in teams:
-            teams[team1] = {"points": 0, "goal_diff": 0, "yellow_cards": 0}
-        if team2 not in teams:
-            teams[team2] = {"points": 0, "goal_diff": 0, "yellow_cards": 0}
-
-        if len(team1_scores) > len(team2_scores):
-            teams[team1]["points"] += 3
-            teams[team1]["goal_diff"] += len(team1_scores) - len(team2_scores)
-            teams[team2]["goal_diff"] += len(team2_scores) - len(team1_scores)
-        elif len(team1_scores) < len(team2_scores):
-            teams[team2]["points"] += 3
-            teams[team1]["goal_diff"] += len(team1_scores) - len(team2_scores)
-            teams[team2]["goal_diff"] += len(team2_scores) - len(team1_scores)
-        else:
-            teams[team1]["points"] += 1
-            teams[team2]["points"] += 1
-
-    # Sort teams by points, goal difference, and yellow cards
-    teams = {k: v for k, v in sorted(teams.items(), key=lambda item: (-item[1]["points"], item[1]["goal_diff"], item[1]["yellow_cards"]))}
-
-    # Write teams to file
-    with open(filepath, "w") as f:
-        for team, stats in teams.items():
-            f.write("{}    {} pts\n".format(team, stats["points"]))
-    return teams
-
-
-
-
 def average_age(players_function):
     teams = {}
     for player in players_function:
@@ -147,33 +109,6 @@ def histogram(players_function):
                 file.write("{} years ({:2d}){}\n".format(age, ages[age],'*' * stars))
                 print("{} years ({:2d}){}".format(age, ages[age],'*' * stars))
 
-def player_most_goals(filename):
-    matches = []
-    goals = []
-    with open(filename, "r", encoding="utf-8") as file:
-        for line in file:
-            stats = line.strip().split(";")
-            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
-                team1 = stats[1]
-                team2 = stats[2]
-                scores = stats[3]
-                team1_scores = scores.split(")(")[0].strip("(")
-                team2_scores = scores.split(")(")[1].strip(")")
-                matches.append({"team1": team1, "team2": team2, 
-                    "team1_scores": team1_scores, "team2_scores": team2_scores})
-                goals.append(team1_scores)
-                goals.append(team2_scores)
-    players_list = player_most_goals(goals)
-    with open("scorers.txt", "w", encoding="utf-8") as f:
-        goals_scored = 0
-        for player in players_list:
-            if player["goals"] > goals_scored:
-                goals_scored = player["goals"]
-                f.write("+-------+--------------+-------------------------+\n")
-                f.write("|{:<5}| {:<12}  | {:<23}|\n".format(str(goals_scored) + " goals", player["country"], player["name"]))
-            elif player["goals"] == goals_scored:
-                f.write("|{:<5}| {:<12}  | {:<23}|\n".format("", player["country"], player["name"]))
-
 def most_yellow_cards(cards):
     match_card_count = {}
     for card in cards:
@@ -199,10 +134,6 @@ def most_yellow_cards(cards):
             file.write(f"{country}: {count} YC\n")
             print(f"{country}: {count} YC")
 
-
-
-
-
 def main():
     players_function = players("WC22Footballers.txt")
     matches_function = matches("WC22GroupMatches.txt")
@@ -211,6 +142,4 @@ def main():
     ages = average_age(players_function)
     stars = histogram(players_function)
     most_yellow_cards(cards_function)
-    knockout_teams = knockout_stage("WC22GroupMatches.txt", "WC22-YellowCards.txt")
-    write_knockout(knockout_teams, "knockout.txt")
 main()
