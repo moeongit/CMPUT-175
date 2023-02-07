@@ -10,16 +10,16 @@ def players(filename):
     with codecs.open(filename, "r", "utf-8") as file:
         for line in file:
             stats = line.strip().split(";")
-            country_number = stats[0].rsplit(" ", 1)
+            country_number = stats[0].rsplit(" ", 1) # Used r.split because the number and country would interfere if the country had a space between it like "South Korea"
             country = " ".join(country_number[:-1])
-            number = country_number[-1]
+            number = country_number[-1] 
             position = stats[1]
             name = stats[2]
-            dob, age = stats[3].split(" (")
+            birth, age = stats[3].split(" (")
             age = age.strip("aged ").strip(")")
             players.append({
                 "country": country, "number": number, "position": position,
-                "name": name, "dob": dob, "age": age})
+                "name": name, "birth": birth, "age": age})
     return players
 
 def matches(filename):
@@ -185,8 +185,9 @@ def main():
     matches_function = matches("WC22GroupMatches.txt")
     cards_function = cards("WC22-YellowCards.txt")
     groups = write_groups("groups.txt", matches_function)
+
     ages = average_age(players_function)
     stars = histogram(players_function)
-    most_player_goals()
+    most_goals = most_player_goals()
     most_yellow_cards(cards_function)
 main()
