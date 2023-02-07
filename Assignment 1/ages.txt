@@ -4,7 +4,7 @@ Belgium     27.81 years
 Brazil      27.88 years
 Cameroon    26.31 years
 Canada      26.92 years
-Costa       27.15 years
+Costa Rica  27.15 years
 Croatia     27.38 years
 Denmark     27.15 years
 Ecuador     25.62 years
@@ -20,10 +20,10 @@ Netherlands 26.62 years
 Poland      27.04 years
 Portugal    26.85 years
 Qatar       26.96 years
-Saudi       27.35 years
+Saudi Arabia27.35 years
 Senegal     25.88 years
 Serbia      26.88 years
-South       27.77 years
+South Korea 27.77 years
 Spain       25.35 years
 Switzerland 27.00 years
 Tunisia     27.92 years

@@ -10,9 +10,9 @@ def players(filename):
     with codecs.open(filename, "r", "utf-8") as file:
         for line in file:
             stats = line.strip().split(";")
-            country_number = stats[0].split(" ")
-            country = country_number[0]
-            number = country_number[1]
+            country_number = stats[0].rsplit(" ", 1)
+            country = " ".join(country_number[:-1])
+            number = country_number[-1]
             position = stats[1]
             name = stats[2]
             dob, age = stats[3].split(" (")
@@ -21,6 +21,7 @@ def players(filename):
                 "country": country, "number": number, "position": position,
                 "name": name, "dob": dob, "age": age})
     return players
+
 
 def matches(filename):
     matches = []
@@ -109,6 +110,53 @@ def histogram(players_function):
                 file.write("{} years ({:2d}){}\n".format(age, ages[age],'*' * stars))
                 print("{} years ({:2d}){}".format(age, ages[age],'*' * stars))
 
+def most_player_goals():
+    players = codecs.open("WC22Footballers.txt", "r", "utf-8")
+    goals = {}
+    top_scorers = {}
+    with codecs.open("WC22GroupMatches.txt", "r", "utf-8") as file:
+        for line in file:
+            stats = line.strip().split(";")
+            if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
+                group = stats[0].upper()
+                team1 = stats[1]
+                team2 = stats[2]
+                position = stats[3].find(")")
+                score1 = stats[3][1:position]
+                score2 = stats[3][position + 2:-1]
+                score1 = score1.split(",")
+                score2 = score2.split(",")
+                for number in score1:
+                    person = " ".join([team1, number])
+                    goals[person] = goals.get(person, 0) + 1
+                for number in score2:
+                    person = " ".join([team2, number])
+                    goals[person] = goals.get(person, 0) + 1
+    top_goals = 0
+    for player, goal in goals.items():  # this loop finds the maximum goal scored
+        if goal > top_goals:
+            top_goals = goal
+    for player, goal in goals.items():  # this loop finds if others scored the same amout
+        if goal == top_goals:
+            top_scorers[player] = goal
+    for person in players:
+        stats = person.split(";")
+        player = stats[0]
+        name = stats[2]
+        if player in top_scorers.keys():
+            top_scorers[player] = name
+    with open("scorers.txt", "w", encoding="utf-8") as file:
+        file.write("+ ------------ + ----------------- + ---------------------------------- +\n")
+        print("+ ------------ + ----------------- + ---------------------------------- +")
+        for player, name in top_scorers.items():
+            player = player.split()
+            team = player[0]
+            number = player[1]
+            file.write(f"|  {top_goals} goals     | {team: <13}     |{number: >3} {name: <32}|\n")
+            print(f"|  {top_goals} goals     | {team: <13}     |{number: >3} {name: <32}|")
+        file.write("+ ------------ + ----------------- + ---------------------------------- +\n")
+        print("+ ------------ + ----------------- + ---------------------------------- +")
+        
 def most_yellow_cards(cards):
     match_card_count = {}
     for card in cards:
@@ -141,5 +189,6 @@ def main():
     groups = write_groups("groups.txt", matches_function)
     ages = average_age(players_function)
     stars = histogram(players_function)
+    most_player_goals()
     most_yellow_cards(cards_function)
 main()
