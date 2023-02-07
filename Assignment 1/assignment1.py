@@ -117,12 +117,11 @@ def most_player_goals():
         for line in file:
             stats = line.strip().split(";")
             if stats[0] and stats[1] and stats[2] and stats[3] and stats[4]:
-                group = stats[0].upper()
                 team1 = stats[1]
                 team2 = stats[2]
-                position = stats[3].find(")")
-                score1 = stats[3][1:position]
-                score2 = stats[3][position + 2:-1]
+                scores = stats[3].find(")")
+                score1 = stats[3][1:scores]
+                score2 = stats[3][scores + 2:-1]
                 score1 = score1.split(",")
                 score2 = score2.split(",")
                 for number in score1:
