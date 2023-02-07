@@ -121,24 +121,24 @@ def most_player_goals():
                 team2 = stats[2]
                 scores = stats[3].find(")")
                 score1 = stats[3][1:scores]
-                score2 = stats[3][scores + 2:-1]
+                score2 = stats[3][scores + 2:-1] # Slicing to find scores
                 score1 = score1.split(",")
                 score2 = score2.split(",")
-                for number in score1:
-                    person = " ".join([team1, number])
-                    goals[person] = goals.get(person, 0) + 1
-                for number in score2:
-                    person = " ".join([team2, number])
-                    goals[person] = goals.get(person, 0) + 1
-    top_goals = 0
+                for num in score1:
+                    player = " ".join([team1, num])
+                    goals[player] = goals.get(player, 0) + 1
+                for num in score2:
+                    player = " ".join([team2, num])
+                    goals[player] = goals.get(player, 0) + 1
+    top_goals = 0 # Counter for goals
     for player, goal in goals.items():  # this loop finds the maximum goal scored
         if goal > top_goals:
             top_goals = goal
     for player, goal in goals.items():  # this loop finds if others scored the same amout
         if goal == top_goals:
             top_scorers[player] = goal
-    for person in players:
-        stats = person.split(";")
+    for player in players:
+        stats = player.split(";")
         player = stats[0]
         name = stats[2]
         if player in top_scorers.keys():
