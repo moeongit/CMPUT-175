@@ -22,7 +22,6 @@ def players(filename):
                 "name": name, "dob": dob, "age": age})
     return players
 
-
 def matches(filename):
     matches = []
     with codecs.open(filename, "r", "utf-8") as file:
@@ -51,7 +50,7 @@ def cards(filename):
     return cards
 
 def write_groups(filename, matches):
-    groups = {}
+    groups = {} # made this a dictionary (easier)
     for match in matches:
         group = match["group"]
         team1 = match["team1"]
@@ -63,7 +62,7 @@ def write_groups(filename, matches):
     with open(filename, "w") as file:
         for group, countries in sorted(groups.items()):
             file.write("Group {}\n".format(group))
-            print("Group {}".format(group))
+            print("Group {}".format(group)) # Used the format function to make everything alphabetical
             for country in sorted(countries):
                 file.write("{}\n".format(country))
                 print("{}".format(country))
@@ -102,7 +101,7 @@ def histogram(players_function):
             ages[age] = 0
         ages[age] += 1
     with open("histogram.txt", "w", encoding="utf-8") as file:
-        for age in range(18, 41):
+        for age in range(18, 41): # Age range 18-40, 41 not exclusive
             if age in ages:
                 stars = round(ages[age]/5)
                 if stars == 0:
