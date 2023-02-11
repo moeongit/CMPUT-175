@@ -10,39 +10,73 @@ from stack import Stack
 
 def getAction():
     '''
-    Write docstring to describe function
-    Inputs: ?
-    Returns: ?
+    Prompts the user to enter a character for navigation:
+    '=' to enter a new website address, 
+    '<' to go back to previous website,
+    '>' to go forward to next website, or 
+    'q' to quit the browser simulation
+    Inputs: None
+    Returns: the valid character entered by the user (str)
     '''
-    #delete pass and write your code here
-    pass
+    action = input("Enter a command ('=', '<', '>', or 'q'): ")
+    return action
 
 def goToNewSite(current, bck, fwd):
     '''
-    Write docstring to describe function
-    Inputs: ?
-    Returns: ?
-    '''   
-    #delete pass and write your code here
-    pass
-    
+    Prompts the user to enter a new website address, 
+    returns that address as a string, 
+    and updates the back and forward stacks as appropriate
+    Inputs: 
+    - current: the current website (str)
+    - bck: a reference to the Stack holding the webpage addresses to go back to
+    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    Returns: the new website address (str)
+    '''
+    newSite = input("URL: ")
+    bck.push(current)
+    fwd.clear()
+    return newSite
+
 def goBack(current, bck, fwd):
     '''
-    Write docstring to describe function
-    Inputs: ?
-    Returns: ?
-    '''    
-    #delete pass and write your code here
-    pass
+    Goes back to the previous website, 
+    handles any exceptions raised by the Stack class, 
+    updates the back and forward stacks as appropriate,
+    and returns the previous website
+    Inputs: 
+    - current: the current website (str)
+    - bck: a reference to the Stack holding the webpage addresses to go back to
+    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    Returns: the previous website address (str)
+    '''
+    try:
+        prevSite = bck.pop()
+        fwd.push(current)
+        return prevSite
+    except:
+        print("Cannot go back.")
+        return current
 
 def goForward(current, bck, fwd):
     '''
-    Write docstring to describe function
-    Inputs: ?
-    Returns: ?
-    '''    
-    #delete pass and write your code here
-    pass
+    Goes forward to the next website, 
+    handles any exceptions raised by the Stack class, 
+    updates the back and forward stacks as appropriate,
+    and returns the next website
+    Inputs: 
+    - current: the current website (str)
+    - bck: a reference to the Stack holding the webpage addresses to go back to
+    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    Returns: the next website address (str)
+    '''
+    try:
+        nextSite = fwd.pop()
+        bck.push(current)
+        return nextSite
+    except:
+        print("Cannot go forward.")
+        return current
+
 
 def main():
     '''
@@ -61,7 +95,9 @@ def main():
         print('\nCurrently viewing', current)
         try:
             action = getAction()
-            
+            if action not in ('=', '<', '>', 'q'):
+                raise Exception('Invalid entry.')
+                
         except Exception as actionException:
             print(actionException.args[0])
             
