@@ -68,6 +68,12 @@ def main():
         else:
             if action == '=':
                 current = goToNewSite(current, back, forward)
+            elif action == '<':
+                current = goBack(current, back, forward)
+            elif action == '>':
+                current = goForward(current, back, forward)
+            elif action == 'q':
+                quit = True
             #TO DO: add code for the other valid actions ('<', '>', 'q')
             #HINT: LOOK AT LAB 4
             
