@@ -47,6 +47,7 @@ def cards(filename):
             if len(stats) == 5:
                 match, country, name, card_type, time = stats
                 cards.append({"match": match, "country": country, "name": name, "type": card_type, "time": time})
+                
     return cards
 
 def write_groups(filename, matches):
@@ -68,6 +69,96 @@ def write_groups(filename, matches):
                 print("{}".format(country))
             file.write("\n")
             print("")
+
+def card_total(team,cardslist):
+    total=0
+    for card in cardslist:
+        if card['country'] == team:
+            if card['type'] == "Y":
+                total+=1
+            elif card['type'] == "R":
+                total+=4
+    return(total)
+
+
+def match_results(matches,cardslist):
+    match_points=[]
+    for match in matches:
+        group=match["group"]
+
+        team1=match["team1"]
+        team2=match["team2"]
+
+        team1_goals=len(match["team1_scores"].split(","))
+        team2_goals=len(match["team2_scores"].split(","))
+
+        score_diff=team1_goals-team2_goals
+
+        if score_diff>0:
+            team1_points=3
+            team2_points=0
+        elif score_diff<0:
+            team2_points=3
+            team1_points=0
+        else:
+            team1_points=1
+            team2_points=1
+        match_points.append({"group": group, "team1": team1, "team2": team2, "score_diff":score_diff, "team1_points":team1_points, "team2_points":team2_points})
+    team_points={}
+    for match in match_points:
+        group=match["group"]
+        team1=match["team1"]
+        team2=match["team2"]
+        if group not in team_points:
+            team_points[group]={}
+        if team1 not in team_points[group]:
+            team_points[group][team1]=0
+        if team2 not in team_points[group]:
+            team_points[group][team2]=0
+        team_points[group][team1]+=match["team1_points"]
+        team_points[group][team2]+=match["team2_points"]
+    
+    output=[]
+    for group in team_points:
+
+        groupteams_scores=team_points[group]
+        sorted_teamscores = sorted(groupteams_scores.items(), key=lambda x:x[1],reverse=True)
+        
+        # Breaking Ties
+        tiebreaker=0
+        if sorted_teamscores[1][1] == sorted_teamscores[2][1]:
+            for match in match_points:
+                if match["team1"]==sorted_teamscores[1][0] and match["team2"]==sorted_teamscores[2][0]:
+                    if score_diff>0:
+                        tiebreaker=1
+                    elif score_diff<0:
+                        tiebreaker=2
+                    else:
+                        team1card=card_total(team1,cardslist)
+                        team2card=card_total(team2,cardslist)
+                    if team1card>team2card:
+                        tiebreaker=2
+                    elif team2card>team1card:
+                        tiebreaker=1
+                if match["team1"]==sorted_teamscores[2][0] and match["team2"]==sorted_teamscores[1][0]:
+                    if score_diff>0:
+                        tiebreaker=2
+                    elif score_diff<0:
+                        tiebreaker=1
+                    else:
+                        team1card=card_total(team1,cardslist)
+                        team2card=card_total(team2,cardslist)
+                    if team1card>team2card:
+                        tiebreaker=1
+                    elif team2card>team1card:
+                        tiebreaker=2
+
+        if tiebreaker==0 or tiebreaker==1:
+            output.append(sorted_teamscores[0])
+            output.append(sorted_teamscores[1])
+        elif tiebreaker == 2:
+            output.append(sorted_teamscores[0])
+            output.append(sorted_teamscores[2])
 
 def average_age(players_function):
     teams = {}
@@ -185,7 +276,7 @@ def main():
     matches_function = matches("WC22GroupMatches.txt")
     cards_function = cards("WC22-YellowCards.txt")
     groups = write_groups("groups.txt", matches_function)
-
+    knockout = match_results(matches_function,cards_function)
     ages = average_age(players_function)
     stars = histogram(players_function)
     most_goals = most_player_goals()
