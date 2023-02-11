@@ -27,9 +27,11 @@ def goToNewSite(current, pages):
     Returns: int
     '''   
     # TO DO: delete pass and write your code here
-    enter_url = input("Enter URL: ")
-    pages.append(enter_url)
-    return len(pages) - 1
+    for i in range(len(pages)):
+        if i > current:
+            pages.pop()
+    pages.append(input("URL: "))
+    return current + 1
 
     
 def goBack(current, pages):
