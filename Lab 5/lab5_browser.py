@@ -10,12 +10,7 @@ from stack import Stack
 
 def getAction():
     '''
-    Prompts the user to enter a character for navigation:
-    '=' to enter a new website address, 
-    '<' to go back to previous website,
-    '>' to go forward to next website, or 
-    'q' to quit the browser simulation
-    Inputs: None
+    Inputs: asks the user for a command
     Returns: the valid character entered by the user (str)
     '''
     action = input("Enter a command ('=', '<', '>', or 'q'): ")
@@ -23,9 +18,6 @@ def getAction():
 
 def goToNewSite(current, bck, fwd):
     '''
-    Prompts the user to enter a new website address, 
-    returns that address as a string, 
-    and updates the back and forward stacks as appropriate
     Inputs: 
     - current: the current website (str)
     - bck: a reference to the Stack holding the webpage addresses to go back to
@@ -39,10 +31,6 @@ def goToNewSite(current, bck, fwd):
 
 def goBack(current, bck, fwd):
     '''
-    Goes back to the previous website, 
-    handles any exceptions raised by the Stack class, 
-    updates the back and forward stacks as appropriate,
-    and returns the previous website
     Inputs: 
     - current: the current website (str)
     - bck: a reference to the Stack holding the webpage addresses to go back to
@@ -59,10 +47,6 @@ def goBack(current, bck, fwd):
 
 def goForward(current, bck, fwd):
     '''
-    Goes forward to the next website, 
-    handles any exceptions raised by the Stack class, 
-    updates the back and forward stacks as appropriate,
-    and returns the next website
     Inputs: 
     - current: the current website (str)
     - bck: a reference to the Stack holding the webpage addresses to go back to
