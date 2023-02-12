@@ -47,7 +47,7 @@ def goBack(current, bck, fwd):
 
 def goForward(current, bck, fwd):
     '''
-    Inputs: 
+    Inputs: None
     - current: the current website (str)
     - bck: a reference to the Stack holding the webpage addresses to go back to
     - fwd: a reference to the Stack holding the webpage addresses to go forward to
