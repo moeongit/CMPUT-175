@@ -16,13 +16,13 @@ class Stack:
     # MODIFY: RAISE AN EXCEPTION IF THIS METHOD IS INVOKED ON AN EMPTY STACK
     def pop(self):       
         if self.isEmpty():
-            raise Exception("The stack is empty. Cannot perform peek operation.")
+            raise Exception("The stack is empty.")
         return self.items.pop()
 
     # MODIFY: RAISE AN EXCEPTION IF THIS METHOD IS INVOKED ON AN EMPTY STACK
     def peek(self):    
         if self.isEmpty():
-            raise Exception("The stack is empty. Cannot perform operation.")
+            raise Exception("The stack is empty.")
         return self.items[len(self.items)-1] 
     
     def isEmpty(self):

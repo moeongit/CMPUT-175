@@ -20,8 +20,8 @@ def goToNewSite(current, bck, fwd):
     '''
     Inputs: 
     - current: the current website (str)
-    - bck: a reference to the Stack holding the webpage addresses to go back to
-    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    - bck
+    - fwd
     Returns: the new website address (str)
     '''
     newSite = input("URL: ")
@@ -33,8 +33,8 @@ def goBack(current, bck, fwd):
     '''
     Inputs: 
     - current: the current website (str)
-    - bck: a reference to the Stack holding the webpage addresses to go back to
-    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    - bck
+    - fwd
     Returns: the previous website address (str)
     '''
     try:
@@ -49,8 +49,8 @@ def goForward(current, bck, fwd):
     '''
     Inputs: None
     - current: the current website (str)
-    - bck: a reference to the Stack holding the webpage addresses to go back to
-    - fwd: a reference to the Stack holding the webpage addresses to go forward to
+    - bck
+    - fwd
     Returns: the next website address (str)
     '''
     try:
