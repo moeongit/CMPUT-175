@@ -38,38 +38,26 @@ class DLinkedList:
 		self.__size= 0        
 
 	def search(self, item):
-		# method that takes an item to search and returns a boolean indicating if the item was found in the list or not.
-		
-		# set current to head of list 
 		current = self.__head
-		# initialize found to False
 		found = False
-		
-		# loop over the list until item is found or end of list is reached
 		while current != None and not found:
-			if current.getData() == item: # item found, set found to True
+			if current.getData() == item: 
 				found= True
-			else: # else move current to next node
+			else: 
 				current = current.getNext()
 		return found
 
 	def index(self, item):
-		# method that takes an item to search and returns the index of first occurrence of item in list if found, else return -1
-		
-		# set current to head of list
 		current = self.__head
-		# initialize found to False and index to 0
 		found = False
 		index = 0
-		
-		# loop over the list until item is found or end of list is reached
 		while current != None and not found:
-			if current.getData() == item: # item found, set found to True
+			if current.getData() == item:
 				found= True
-			else: # else move current to next node and increment index by 1
+			else:
 				current = current.getNext()
 				index = index + 1
-		if not found: # item not found, set index to -1
+		if not found: 
 			index = -1
 		return index    
   
