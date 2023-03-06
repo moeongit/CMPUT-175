@@ -61,7 +61,7 @@ class SLinkedList:
         current = self.head
         for i in range(pos):
             if current == None:
-                raise Exception("Position is out of range")
+                raise Exception("Position is out of range.")
             previous = current
             current = current.next
         if previous == None:

@@ -62,231 +62,153 @@ class DLinkedList:
 		return index    
   
 	def add(self, item):
-		# method that takes an item to insert and inserts the item at the start of list
-        
-		# create a new node with data=item, next=head and previous=None
 		node = DLinkedListNode(item, self.__head, None)
-		# not an empty list, update previous of head to node
 		if self.__head != None:
 			self.__head.setPrevious(node)
-		else: # empty list, update tail to node
+		else: 
 			self.__tail = node
-		self.__head = node # update head to point to node
-		self.__size = self.__size + 1 # increment size by 1
+		self.__head = node 
+		self.__size += 1
 		
 	def remove(self, item):
-		# method that takes an item to remove and removes the first occurrence of the item from the list
-        
-		# set current to head node
 		current = self.__head
-		
-		# loop over the list until the node with item is not found
-		while current is not None and current.getData() != item:
+		while current.getData() != item and current is not None:
 			current = current.getNext()
-		
-		# item found
 		if current is not None:
-			# item is at head node
 			if current == self.__head:
-				self.__head = self.__head.getNext() # set head to next node
-				if self.__head is not None: # list is not empty after removal
-					self.__head.setPrevious(None) # update previous of head to none
-				else: # list is empty after removal, update tail to none
+				self.__head = self.__head.getNext() 
+				if self.__head is not None: 
+					self.__head.setPrevious(None) 
+				else: 
 					self.__tail = None
-			elif current == self.__tail: # item is at tail node
-				self.__tail = self.__tail.getPrevious() # move tail to previous node
-				self.__tail.setNext(None) # update next of tail to None
-			else: # item is at middle node
-				# update next of node previous to current to node next to current
+			elif current == self.__tail:
+				self.__tail = self.__tail.getPrevious() 
+				self.__tail.setNext(None) 
+			else: 
 				current.getPrevious().setNext(current.getNext())
-				# update previous of node next to current to node previous to current
 				current.getNext().setPrevious(current.getPrevious())
-				
-			# update next and previous of current to None	
 			current.setNext(None)
 			current.setPrevious(None) 
-			self.__size = self.__size - 1 # decrement size by 1
+			self.__size -= 1
 				
 	def append(self, item):
-        # method that takes an item and inserts it to the end of list
-		
-		# create a new node with data=item, next=None and previous=None
 		node = DLinkedListNode(item, None, None)
-		if self.__head == None: # empty list, update head to node
+		if self.__head == None:
 			self.__head = node
-		else: # non-empty list
-			self.__tail.setNext(node) # update next of tail to point to node
-			node.setPrevious(self.__tail) # update previous of node to tail
-
-		self.__tail = node # set tail to point to node
-		self.__size = self.__size + 1 # increment size by 1
+		else:
+			self.__tail.setNext(node) 
+			node.setPrevious(self.__tail)
+		self.__tail = node 
+		self.__size += 1
 		
 	def insert(self, pos, item):
-		# method that takes an int for position and an item and inserts item at given position
-		
 		if pos == 0:
 			self.add(item)
 		elif pos == self.__size:
 			self.append(item)
 		else:
-		
-			# set current to head of list
 			current = self.__head
-			index = 0 # initialize index to 0
-		
+			index = 0
 			while current != None and index != pos:
 				current = current.getNext()
 				index = index + 1
-			
 			if index == pos:
-				# create a new node with data=item, next=None and previous=None
 				node = DLinkedListNode(item, None, None)
 				node.setNext(current)
 				node.setPrevious(current.getPrevious())
-				
 				current.getPrevious().setNext(node)
 				current.setPrevious(node)
-				
-				self.__size = self.__size + 1
+				self.__size += 1
 	
 	def pop1(self):
-		# method that takes no arguments and removes and returns the last item from the list
-		
-		if self.__size == 0: # empty list, return None
+		if self.__size == 0: 
 			return None
-		if self.__size == 1: # list contains one element
-			# get the data of head
+		if self.__size == 1: 
 			element = self.__head.getData()
-			# set head and tail to None
 			self.__head = self.__tail = None
-			self.__size = 0 # set size to 0
+			self.__size = 0 
 			return element
-		
-		# set element to data of tail
 		element = self.__tail.getData()
-		# update tail to node previous to tail
 		self.__tail = self.__tail.getPrevious()
-		# update next of tail to None
 		self.__tail.setNext(None)
-		self.__size	= self.__size - 1 # decrement size by 1
-		return element # return element
+		self.__size	-= 1
+		return element 
 
 	def pop(self, pos=None):
-		# method that takes an integer for position and removes and returns the element at pos
-		
-		# pos argument not given, call pop1
 		if pos is None:
 			return self.pop1()
-		
-		# pos is less than 0 or greater than or equal to size of list, throw exception
 		if pos < 0 or pos >= self.__size:
-			raise Exception("Position outside the valid range")
-			
-		if pos == 0: # delete the head
-			element = self.__head.getData() # set element to data of head
-			self.__head = self.__head.getNext() # update head to node next to head
-			if self.__head == None: # list is empty after removel, set tail to none
+			raise Exception("Position not in range.")
+		if pos == 0: 
+			element = self.__head.getData()
+			self.__head = self.__head.getNext() 
+			if self.__head == None: 
 				self.__tail = None
-			else: # else update previous of head to None
+			else:
 				self.__head.setPrevious(None)
-			self.__size = self.__size - 1 # decrement size of list
+			self.__size -= 1
 			return element
 		elif pos == self.__size	- 1:
 			return self.pop1()
-		
-		# set current to head of list	
 		current = self.__head
-		# set index to 0
 		index = 0
-		
-		# loop over the list to get the node at pos
 		while current != None and index != pos:
 			current = current.getNext()
-			index = index + 1
-			
-		# get the data of current node	
+			index += 1
 		element = current.getData()
-		# update next of node previous to current to node next to current
 		current.getPrevious().setNext(current.getNext())
-		# update previous of node next to current to node previous to current
 		current.getNext().setPrevious(current.getPrevious())
-		# set next and previous of current to None
 		current.setNext(None)
 		current.setPrevious(None)
-		self.__size = self.__size - 1 # decrement size by 1
+		self.__size -= 1
 		return element
 			
 	def searchLarger(self, item):
-		# method that takes an item and returns the index of first element which is larger than item, if found else return -1
-		
-		# set current to head of list
 		current = self.__head
-		index = 0 # set index to 0
-		
-		# loop over the list until the end or we reach a node with data greater than item
+		index = 0
 		while current != None and current.getData() <= item:
 			current = current.getNext()
 			index = index + 1
-			
-		# data greater than item not found, set index to -1
 		if current is None:
 			index = -1
 		return index
 		
 	def getSize(self):
-		# method that returns the number of elements in the list
-		
 		return self.__size
 	
 	def getItem(self, pos):
-		# method that takes an integer for pos and returns the element at pos
-		
-		# pos is not negative
 		if pos >= 0:
-			index = 0 # set index to 0
-			current = self.__head # set current to head of list
-			
-			# loop over the list until end or node at pos is reached
+			index = 0
+			current = self.__head 
 			while current != None and index != pos:
 				current = current.getNext()
-				index = index + 1
-				
-			if current is not None: # node at pos found
+				index += 1
+			if current is not None: 
 				return current.getData()
-			else: # position outside range
-				raise Exception("Position outside the valid range")	
-				
-		else: # pos is negative
-			index = -1 # set index to -1
-			current = self.__tail # set current to tail of list
-			
-			# loop over the list until the start of list is reached or we reach the node at pos
+			else:
+				raise Exception("Position not in range.")	
+		else:
+			index = -1 
+			current = self.__tail 
 			while current != None and index != pos:
 				current = current.getPrevious()
-				index = index - 1
-				
-			if current is not None: # node at pos found
+				index -= 1
+			if current is not None:
 				return current.getData()
-			else: # position outside range
-				raise Exception("Position outside the valid range")
+			else: 
+				raise Exception("Position not in range.")
 	
 	def __str__(self):
-		# method that returns a string containing the string representation of the list
-		
-		if self.__size == 0: # empty list, return empty string
+		if self.__size == 0: 
 			return ""
-			
-		current = self.__head # set current to head of list
-		nodeList = "" # set nodeList to empty string
-		
-		# loop over the list until the last node is reached
+		current = self.__head 
+		nodeList = "" 
 		while current.getNext() is not None:
-			nodeList = nodeList + "{} ".format(current.getData()) # append string representation of data followed by a space
+			nodeList = nodeList + "{} ".format(current.getData())
 			current = current.getNext()
-			
-		# append the last node's data to nodeList
 		nodeList = nodeList + "{}".format(current.getData())
 		return nodeList
+
 def test():
                   
     linked_list = DLinkedList()
