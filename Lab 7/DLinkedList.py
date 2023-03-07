@@ -42,7 +42,7 @@ class DLinkedList:
 		found = False
 		while current != None and not found:
 			if current.getData() == item: 
-				found= True
+				found = True
 			else: 
 				current = current.getNext()
 		return found
@@ -50,16 +50,16 @@ class DLinkedList:
 	def index(self, item):
 		current = self.__head
 		found = False
-		index = 0
+		i = 0
 		while current != None and not found:
 			if current.getData() == item:
 				found= True
 			else:
 				current = current.getNext()
-				index = index + 1
+				i = i + 1
 		if not found: 
-			index = -1
-		return index    
+			i = -1
+		return i    
   
 	def add(self, item):
 		node = DLinkedListNode(item, self.__head, None)
@@ -108,11 +108,11 @@ class DLinkedList:
 			self.append(item)
 		else:
 			current = self.__head
-			index = 0
-			while current != None and index != pos:
+			i = 0
+			while current != None and i != pos:
 				current = current.getNext()
-				index = index + 1
-			if index == pos:
+				i = i + 1
+			if i == pos:
 				node = DLinkedListNode(item, None, None)
 				node.setNext(current)
 				node.setPrevious(current.getPrevious())
@@ -151,10 +151,10 @@ class DLinkedList:
 		elif pos == self.__size	- 1:
 			return self.pop1()
 		current = self.__head
-		index = 0
-		while current != None and index != pos:
+		i = 0
+		while current != None and i != pos:
 			current = current.getNext()
-			index += 1
+			i += 1
 		element = current.getData()
 		current.getPrevious().setNext(current.getNext())
 		current.getNext().setPrevious(current.getPrevious())
@@ -165,34 +165,34 @@ class DLinkedList:
 			
 	def searchLarger(self, item):
 		current = self.__head
-		index = 0
+		i = 0
 		while current != None and current.getData() <= item:
 			current = current.getNext()
-			index = index + 1
+			i = i + 1
 		if current is None:
-			index = -1
-		return index
+			i = -1
+		return i
 		
 	def getSize(self):
 		return self.__size
 	
 	def getItem(self, pos):
 		if pos >= 0:
-			index = 0
+			i = 0
 			current = self.__head 
-			while current != None and index != pos:
+			while current != None and i != pos:
 				current = current.getNext()
-				index += 1
+				i += 1
 			if current is not None: 
 				return current.getData()
 			else:
 				raise Exception("Position not in range.")	
 		else:
-			index = -1 
+			i = -1 
 			current = self.__tail 
-			while current != None and index != pos:
+			while current != None and i != pos:
 				current = current.getPrevious()
-				index -= 1
+				i -= 1
 			if current is not None:
 				return current.getData()
 			else: 
