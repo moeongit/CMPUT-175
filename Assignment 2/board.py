@@ -8,10 +8,18 @@ class Board:
         self.width = width
         self.height = height
         self.board = [[Stack() for _ in range(width)] for _ in range(height)]
-        for r, c in obstacle_positions:
-            self.check_row(r)
-            self.check_column(c)
-            self.board[r-1][self.columns.index(c)].push('X')
+        for i, j in obstacle_positions:
+            self.check_row(i)
+            self.check_column(j)
+            self.board[i-1][self.columns.index(j)].push('X')
+    
+    def get_cell(self, row, col):
+        if not (1 <= row <= self.height):
+            raise Exception(f"Invalid row: {row}")
+        if not (1 <= col <= self.width):
+            raise Exception(f"Invalid column: {col}")
+        return self.grid[row-1][col-1]
+
     
     def check_row(self, row):
         if not 1 <= row <= self.height:
@@ -22,9 +30,9 @@ class Board:
             raise Exception(f"Invalid column: {column}")
     
     def check_obstacle_positions(self, obstacle_positions):
-        for r, c in obstacle_positions:
-            self.check_row(r)
-            self.check_column(c)
+        for i, j in obstacle_positions:
+            self.check_row(i)
+            self.check_column(j)
     
     def get_width(self):
         return self.width
@@ -39,10 +47,10 @@ class Board:
         column_header = '   ' + '   '.join(self.columns)
         row_separator = '+---' * self.width + '+'
         output = [column_header, row_separator]
-        for r in range(self.height):
-            row = str(r+1) + ' |'
-            for c in range(self.width):
-                stack = self.board[r][c]
+        for i in range(self.height):
+            row = str(i+1) + ' |'
+            for j in range(self.width):
+                stack = self.board[i][j]
                 if stack.is_empty():
                     row += '   |'
                 else:
