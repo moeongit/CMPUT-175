@@ -20,7 +20,7 @@ class Player:
         return len(self.goats)
 
     def __str__(self):
-        output = f"{self.color}\nGoats:\n"
+        str = f"{self.color}\nGoats:\n"
         for goat in self.goats:
-            output += f"{goat}\n"
-        return output
+            str += f"{goat}\n"
+        return str
