@@ -7,7 +7,7 @@ class Board:
     def __init__(self, width, height, obstacle_positions):
         self.width = width
         self.height = height
-        self.board = [[Stack() for _ in range(width)] for _ in range(height)]
+        self.board = [[Stack() for i in range(width)] for j in range(height)]
         for i, j in obstacle_positions:
             self.check_row(i)
             self.check_column(j)

@@ -8,7 +8,7 @@ class Goat:
             raise ValueError(f"Invalid color: {color}. Valid colors are {self.colors}")
         self.color = color
         self.row = -1
-        self.column = ""
+        self.column = -1
 
     def __str__(self):
         if self.row == -1:
