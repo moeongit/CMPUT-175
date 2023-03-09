@@ -1,7 +1,3 @@
-#----------------------------------------------------
-# Stack implementation
-#----------------------------------------------------
-
 class Stack:
     def __init__(self):
         self.items = []
@@ -10,12 +6,14 @@ class Stack:
         self.items.append(item)
 
     def pop(self):
-        if not self.is_empty():
-            return self.items.pop()
+        if self.is_empty():
+            raise Exception("Cannot pop from an empty stack")
+        return self.items.pop()
 
     def peek(self):
-        if not self.is_empty():
-            return self.items[-1]
+        if self.is_empty():
+            raise Exception("Cannot peek an empty stack")
+        return self.items[-1]
 
     def is_empty(self):
         return len(self.items) == 0
