@@ -1,5 +1,6 @@
 class Player:
     def __init__(self, color):
+        valid_colors = ["WHITE", "BLACK", "RED", "ORANGE", "GREEN"]
         self.color = color
         self.goats = []
 
@@ -24,3 +25,22 @@ class Player:
         for goat in self.goats:
             str += f"{goat}\n"
         return str
+
+p1 = Player("WHITE")
+print(p1.get_color())  # Output: WHITE
+
+g1 = Goat("WHITE")
+g2 = Goat("WHITE")
+g3 = Goat("WHITE")
+p1.add_goat(g1)
+p1.add_goat(g2)
+p1.add_goat(g3)
+print(p1.get_num_goats())  # Output: 3
+
+p1.remove_goat(g2)
+print(p1.get_num_goats())  # Output: 2
+
+print(p1)  # Output: WHITE
+           #         Goats:
+           #         WHITE A1
+           #         WHITE E1
