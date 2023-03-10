@@ -1,11 +1,11 @@
 class Goat:
-    def __init__(self, color):
+    def __init__(self, color, row, col):
         valid_colors = ["WHITE", "BLACK", "RED", "ORANGE", "GREEN"]
         if color not in valid_colors:
             raise ValueError("Invalid color.")
         self.color = color
-        self.row = -1
-        self.column = -1
+        self.row = row
+        self.column = col
 
     def __str__(self):
         if self.row == -1 or self.column == -1:
