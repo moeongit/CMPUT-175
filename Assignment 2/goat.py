@@ -29,7 +29,7 @@ class Goat:
     
     def set_location(self, row, column):
         if not isinstance(row, int) or not isinstance(column, str) or len(column) != 1:
-            raise TypeError("Row must be an integer and column must be a single character string")
+            raise TypeError("Row must be an integer and column must be a single letter.")
         if row < 1 or row > 6:
             raise ValueError("Row must be between 1 and 6.")
         col = column.upper()
