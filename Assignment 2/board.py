@@ -57,13 +57,8 @@ class Board:
         return '\n'.join(output)
 
 
-board = Board(9, 6, [(3, 'B')])
-
-# add 3 goats to the board
-board.get_board()[1][1].push(Goat('WHITE', 2, 'B'))
-
-board.get_board()[3][3].push(Goat('BLACK', 2, 'J'))
-board.get_board()[5][5].push(Goat('RED', 2, 'I'))
-
-# print the board
-print(board)
+# board = Board(9, 6, [(3, 'B')])
+# board.get_board()[1][1].push(Goat('WHITE', 2, 'B'))
+# board.get_board()[3][3].push(Goat('BLACK', 2, 'J'))
+# board.get_board()[5][5].push(Goat('RED', 2, 'I'))
+# print(board)
