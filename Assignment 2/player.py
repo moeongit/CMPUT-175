@@ -4,7 +4,7 @@ class Player:
     def __init__(self, color):
         self.color = color
         self.goats = []
-        
+
     def __str__(self):
         output = f"{self.color}\nGoats:\n"
         if len(self.goats) == 0:

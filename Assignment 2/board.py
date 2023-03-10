@@ -36,7 +36,7 @@ class Board:
         return self.board
     
     def __str__(self):
-        column_header = '      ' + '   '.join(Board.columns)
+        column_header = '    ' + '   '.join(Board.columns)
         row_separator = '  +-' + '-+-'.join(['-'  for i in range(self.width)]) + '-+'
 
         output = [column_header, row_separator]
