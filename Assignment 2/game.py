@@ -40,8 +40,8 @@ class Game:
         current_player = str(self.current_player)
         phase = str(self.phase)
         turn = str(self.turn)
-        blocked_goats = str(self.get_goats_blocked(self.current_player))
-        return f"{board}\nCurrent player: {current_player}\nPhase: {phase}\nTurn: {turn}\nBlocked goats: {blocked_goats}"
+        # blocked_goats = str(self.get_goats_blocked(self.current_player))
+        return f"{board}\nPlayers: {current_player}\nPhase: {phase}\nPlayer whose turn it is: {turn}"
 
 
     def get_phase(self) -> int:
@@ -60,11 +60,11 @@ class Game:
 
     
     def get_goats_blocked(self, player):
-        count = 0
-        for goat in self.board.goats:
-            if goat.player == player and not goat.can_jump():
-                count += 1
-        return count
+        goats_blocked = 0
+        for goat in player.goats:
+            if self.board.check_goat_blocked(goat):
+                goats_blocked += 1
+        return goats_blocked
 
 
 
@@ -277,7 +277,7 @@ if __name__ == '__main__':
 
     pass
 
-game = Game(width=7, height=7, obstacle_positions=[(3,"C"), (3,"B"), (4,"A"), (4,"G")])
+game = Game(width=9, height=6, obstacle_positions=[(3,"C"), (3,"B"), (4,"A"), (4,"G")])
 
 # Add players
 game.add_player("Player 1")
