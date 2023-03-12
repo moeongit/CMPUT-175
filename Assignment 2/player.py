@@ -6,24 +6,18 @@ class Player:
         self.goats = []
 
     def __str__(self):
-        output = f"{self.color}\nGoats:\n"
+        code = f"{self.color}\nGoats:\n"
         if len(self.goats) == 0:
-            output += "None"
+            code += "None"
         else:
             for goat in self.goats:
-                output += f"{goat.color} {goat.column}{goat.row}\n"
-        return output
+                code += f"{goat.color} {goat.column}{goat.row}\n"
+        return code
         
     def add_goat(self, goat):
-        if goat.color != self.color:
-            raise ValueError(f"Goat color '{goat.color}' does not match player color '{self.color}'")
-        if goat in self.goats:
-            raise ValueError("Goat already exists in player's list")
         self.goats.append(goat)
 
     def remove_goat(self, goat):
-        if goat not in self.goats:
-            raise ValueError("Goat not found in player's goats")
         self.goats.remove(goat)
         
     def get_color(self):

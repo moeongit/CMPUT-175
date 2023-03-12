@@ -9,20 +9,13 @@ class Goat:
 
     def __str__(self):
         if self.row == -1 or self.column == -1:
-            return "-1"
-        col = chr(self.column + ord('A'))
-        return col + str(self.row + 1)
+            return "Goat not placed"
+        return self.column + str(self.row)
 
     def get_location(self):
         if self.row == -1 or self.column == -1:
             return -1
         return (self.row, self.column)
-
-    def get_row(self):
-        return self.row
-    
-    def get_column(self):
-        return self.column
     
     def get_color(self):
         return self.color

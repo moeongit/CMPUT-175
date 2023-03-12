@@ -27,21 +27,19 @@ class Game:
         Initializes the game
         '''
         self.board = Board(width, height, obstacle_positions)
-        self.players = []
+        self.players = ["WHITE", "BLACK", "RED", "ORANGE", "GREEN"]
         self.current_turn = 0
         self.phase = 1
-        self.goats_per_player = [GOATS_PER_PLAYER, GOATS_PER_PLAYER]
-        self.turn = 0  # Add this line to define and set the initial value of the `turn` attribute
-        self.current_player = 0
+        self.turn = 0  
 
 
     def __str__(self) -> str:
         board = str(self.board)
-        current_player = str(self.current_player)
+        current_players = str(self.players)
         phase = str(self.phase)
         turn = str(self.turn)
         # blocked_goats = str(self.get_goats_blocked(self.current_player))
-        return f"{board}\nPlayers: {current_player}\nPhase: {phase}\nPlayer whose turn it is: {turn}"
+        return f"{board}\nPlayers: {current_players}\nPhase: {phase}\nPlayer whose turn it is: {turn}"
 
 
     def get_phase(self) -> int:
