@@ -27,19 +27,19 @@ class Game:
         Initializes the game
         '''
         self.board = Board(width, height, obstacle_positions)
-        self.players = ["WHITE", "BLACK", "RED", "ORANGE", "GREEN"]
-        self.current_turn = 0
+        self.players = []
+        self.goats = []
         self.phase = 1
-        self.turn = 0  
+        self.turn = 0
+        self.goats_blocked = [0, 0]
 
 
     def __str__(self) -> str:
-        board = str(self.board)
-        current_players = str(self.players)
-        phase = str(self.phase)
-        turn = str(self.turn)
-        # blocked_goats = str(self.get_goats_blocked(self.current_player))
-        return f"{board}\nPlayers: {current_players}\nPhase: {phase}\nPlayer whose turn it is: {turn}"
+        board = str(self.board)        
+        players_str = "Players: " + ", ".join([player.color for player in self.players]) 
+        phase_str = str(self.phase) 
+        turn_str = "Player whose turn it is: " + str(self.players[self.turn].color) if self.turn is not None else "UNDEFINED"
+        return f"{board}\n{players_str}\nPhase: {phase_str}\n{turn_str}"
 
 
     def get_phase(self) -> int:
@@ -58,28 +58,20 @@ class Game:
 
     
     def get_goats_blocked(self, player):
-        goats_blocked = 0
+        """
+        Returns the number of goats that cannot jump for the given player.
+        """
+        blocked = 0
         for goat in player.goats:
-            if self.board.check_goat_blocked(goat):
-                goats_blocked += 1
-        return goats_blocked
+            if goat.blocked:
+                blocked += 1
+        return blocked
 
 
-
-    def get_goats_per_player(self, player_index: int) -> int:
-        '''
-        Returns the number of goats for the player at the given index
-        '''
-        if player_index < 0 or player_index >= len(self.players):
-            return -1
-        
-        player_goats = 0
-        for goat_count in self.goats_per_player:
-            if self.players.index(player_index) % 2 == self.goats_per_player.index(goat_count):
-                player_goats = goat_count
-        
-        return player_goats
-
+    def get_goats_per_player(self) -> List[int]:
+        '''Return a list that contains the number of goats per player.'''
+        goats_per_player = [len(player.goats) for player in self.players]
+        return goats_per_player
 
 
     def set_phase(self, phase: int) -> None:
@@ -92,44 +84,24 @@ class Game:
         self.turn = turn % len(self.players)
 
 
-
-    def add_player(self, player_index: int) -> Player:
-        if len(self.players) >= 2:
-            raise ValueError("The game already has two players.")
-        player = Player(player_index)
+    def add_player(self, player: Player) -> None:
+        '''Adds a player to the list of players in the game'''
         self.players.append(player)
-        return player
-
 
 
     def add_goat(self, row: int, column: str) -> None:
         '''Add goat to stack in given location (row, column).'''
-        # Check if the given column is valid
-        if column not in VALID_COLUMNS:
-            raise ValueError(f"Invalid column '{column}'")
+        # Check if the given location is valid
+        if row < 0 or row > self.rows or column not in self.columns:
+            raise Exception(f"Invalid location: ({row}, {column})")
+            
+        # Check if the stack at the given location is not full
+        if len(self.board[row][column]) >= self.stack_size:
+            raise Exception(f"Cannot add goat, stack at ({row}, {column}) is already full.")
+            
+        # Add a goat to the stack at the given location
+        self.board[row][column].append("goat")
 
-        # Get the corresponding column index
-        col_index = VALID_COLUMNS.index(column)
-
-        # Check if the given row and column indices are within bounds
-        if row < 0 or row >= self.board.num_rows() or col_index < 0 or col_index > self.board.num_cols():
-            raise ValueError(f"Invalid goat position ({row}, {column})")
-
-        # Check if the maximum number of goats per player has been reached
-        if self.goats_per_player[self.turn] >= GOATS_PER_PLAYER:
-            raise ValueError(f"Player {self.turn} has reached the maximum number of goats")
-
-        # Check if the starting position is valid for the current game phase
-        if self.phase == 1 and (row, col_index) not in [(0, 3), (0, 4), (1, 4)]:
-            raise ValueError("Goat must be placed in one of the starting positions in phase 1")
-
-        # Check if there is already a goat in the given position
-        if self.board.get_cell(row, col_index) is not None:
-            raise ValueError(f"A goat already exists in position ({row}, {column})")
-
-        # Add the goat to the board and update the count for the current player
-        self.board.set_cell(row, col_index, Goat(self.turn))
-        self.goats_per_player[self.turn] += 1
 
 
     def move_sideways(self, move):
@@ -278,17 +250,17 @@ if __name__ == '__main__':
 game = Game(width=9, height=6, obstacle_positions=[(3,"C"), (3,"B"), (4,"A"), (4,"G")])
 
 # Add players
-game.add_player("Player 1")
-game.add_player("Player 2")
+game.add_player("WHITE")
+# game.add_player("BLACK")
 
 # Print the board
 print(game)
 
 # Move a goat
-game.move_forward(1, (1,1), (2,1))
+# game.move_forward(1, (1,1), (2,1))
 
 # Print the board again to see the changes
-print(game)
+# print(game)
 
 # Check the winner
 winner = game.check_winner()
