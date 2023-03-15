@@ -133,22 +133,20 @@ class Game:
             print("Error: Goat is blocked by an obstacle")
             return False
 
-        # Move the goat
         goat.move_to(column, current_row)
-
-        # Update the board
         self.board.update_board()
+        
         return True
-
+    
 
     def move_forward(self, move, dice_outcome):
         '''
         Executes forward move if valid
         '''
         if self.current_turn != move[0]:
-            raise ValueError("It's not this player's turn.")
-        if dice_outcome not in range(1, 4):
-            raise ValueError("The dice outcome must be between 1 and 3.")
+            raise ValueError("It isn't this player's turn yet")
+        if dice_outcome not in range(1, 6):
+            raise ValueError("The dice outcome must be between 1 and 6")
         player_goats = self.board.get_player_goats(move[0])
         goat = player_goats[move[1]]
         if goat.is_blocked():
@@ -161,9 +159,6 @@ class Game:
             raise ValueError("The goat cannot be moved to this column.")
 
         new_col = VALID_COLUMNS[new_col_index]
-
-        if self.board.is_location_occupied(new_row, new_col):
-            raise ValueError("This location is already occupied by another goat.")
         self.board.move_goat(goat, new_row, new_col)
         if new_row == 0:
             goat.set_status(Goat.STATUS_BLOCKED)
@@ -230,10 +225,15 @@ class Game:
             the necessary goats to the Destination
         '''
         for player in self.players:
-            if len(player.goats_destination) >= WINNING_NUMBER_GOATS:
-                return True
-        return False
-
+            counter = 0
+            for goat in player.goats:
+                row, col = goat.get_location()
+                if col == "I":
+                    counter += 1
+                if counter == 3:
+                    return player
+        return None
+    
     def check_tie(self) -> bool:
         '''
         Returns whether there is a tie since no player has possible moves
@@ -246,32 +246,29 @@ class Game:
 if __name__ == '__main__':
 
     pass
+# game = Game(9, 6, [(3,"C"), (3,"B"), (4,"A"), (4,"G")])
 
-game = Game(width=9, height=6, obstacle_positions=[(3,"C"), (3,"B"), (4,"A"), (4,"G")])
+# game.add_player(Player("WHITE"))
+# player1 = Player("WHITE")
+# # game.add_player(Player("BLACK"))
+# # game.set_location(Player())
+# goat1 = Goat("WHITE", 2, "I")
+# goat2 = Goat("WHITE", 3, "I")
+# goat3 = Goat("WHITE", 4, "I")
 
-# Add players
-game.add_player("WHITE")
-# game.add_player("BLACK")
-
-# Print the board
-print(game)
-
-# Move a goat
-# game.move_forward(1, (1,1), (2,1))
-
-# Print the board again to see the changes
+# player1.add_goat(goat1)
+# player1.add_goat(goat2)
+# player1.add_goat(goat3)
 # print(game)
-
-# Check the winner
-winner = game.check_winner()
-if winner is not None:
-    print(f"{winner} wins!")
-else:
-    print("No winner yet.")
-
-# Check for a tie
-tie = game.check_tie()
-if tie:
-    print("It's a tie!")
-else:
-    print("No tie yet.")
+# # Check the winner
+# winner = game.check_winner()
+# if winner is not None:
+#     print(f"{winner} wins!")
+# else:
+#     print("No winner yet.")
+# # Check for a tie
+# tie = game.check_tie()
+# if tie:
+#     print("It's a tie!")
+# else:
+#     print("No tie yet.")

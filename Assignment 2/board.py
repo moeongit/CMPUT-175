@@ -36,10 +36,10 @@ class Board:
         return self.board
     
     def __str__(self):
-        column_header = '    ' + '   '.join(Board.columns)
-        row_separator = '  +-' + '-+-'.join(['-'  for i in range(self.width)]) + '-+'
+        column_board = '    ' + '   '.join(Board.columns)
+        row_board = '  +-' + '-+-'.join(['-'  for i in range(self.width)]) + '-+'
 
-        output = [column_header, row_separator]
+        code = [column_board, row_board]
         for i in range(self.height):
             row = f"{i+1} |"
             for j in range(self.width):
@@ -52,6 +52,8 @@ class Board:
                         row += f" {top_goat.color[0]} |"
                     else:
                         row += ' X |'
-            output.append(row)
-            output.append(row_separator)
-        return '\n'.join(output)
+            code.append(row)
+            code.append(row_board)
+        return '\n'.join(code)
+
+
