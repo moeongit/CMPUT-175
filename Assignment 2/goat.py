@@ -1,3 +1,6 @@
+# Author: Mohammed Al Robiay
+# Collaborators/References: None
+
 class Goat:
     def __init__(self, color, row, col):
         valid_colors = ["WHITE", "BLACK", "RED", "ORANGE", "GREEN"]

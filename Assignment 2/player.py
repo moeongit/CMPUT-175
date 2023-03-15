@@ -1,3 +1,6 @@
+# Author: Mohammed Al Robiay
+# Collaborators/References: None
+
 from goat import Goat
 
 class Player:

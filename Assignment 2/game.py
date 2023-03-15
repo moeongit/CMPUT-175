@@ -1,6 +1,8 @@
 #----------------------------------------------------
 # Game implementation
 #----------------------------------------------------
+# Author: Mohammed Al Robiay
+# Collaborators/References: None
 
 from typing import List
 from goat import Goat

@@ -1,3 +1,6 @@
+# Author: Mohammed Al Robiay
+# Collaborators/References: None
+
 from stack import Stack
 from goat import Goat
 
@@ -55,5 +58,3 @@ class Board:
             code.append(row)
             code.append(row_board)
         return '\n'.join(code)
-
-
