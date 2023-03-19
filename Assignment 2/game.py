@@ -5,9 +5,9 @@
 #----------------------------------------------------
 
 from typing import List
-from goat import Goat
-from board import Board
-from player import Player
+from .goat import Goat
+from .board import Board
+from .player import Player
 
 GOATS_PER_PLAYER = 4
 WINNING_NUMBER_GOATS = 3
