@@ -1,8 +1,8 @@
+# Author: Mohammed Al Robiay
+# Collaborators/References: None
 #----------------------------------------------------
 # Game implementation
 #----------------------------------------------------
-# Author: Mohammed Al Robiay
-# Collaborators/References: None
 
 from typing import List
 from goat import Goat
@@ -25,252 +25,238 @@ class Game:
     # 
     ################################################
     def __init__(self, width: int, height: int, obstacle_positions: List = []):
-        '''
-        Initializes the game
-        '''
+        self.width = width
+        self.height = height
+        self.obstacle_positions = obstacle_positions
         self.board = Board(width, height, obstacle_positions)
         self.players = []
-        self.goats = []
-        self.phase = 1
         self.turn = 0
-        self.goats_blocked = [0, 0]
+        self.phase = 1
+
+    def __str__(self):
+        board_str = str(self.board)
+        players_str = 'Players: ' + ', '.join([player.color for player in self.players])
+        phase_str = f"Phase: {self.phase}"
+        turn_str = f"Player whose turn it is: {self.players[self.turn].color if self.turn is not None else 'UNDEFINED'}"
+
+        return f"{board_str}\n\n{players_str}\n{phase_str}\n{turn_str}"
 
 
-    def __str__(self) -> str:
-        board = str(self.board)        
-        players_str = "Players: " + ", ".join([player.color for player in self.players]) 
-        phase_str = str(self.phase) 
-        turn_str = "Player whose turn it is: " + str(self.players[self.turn].color) if self.turn is not None else "UNDEFINED"
-        return f"{board}\n{players_str}\nPhase: {phase_str}\n{turn_str}"
-
-
-    def get_phase(self) -> int:
-        '''Returns the game phase'''
+    def get_phase(self):
         return self.phase
 
-
-    def get_turn(self) -> int:
-        '''Returns the index of the player whose turn it is'''
+    def get_turn(self):
         return self.turn
 
-
-    def get_current_player(self) -> Player:
-        '''Returns the current player'''
+    def get_current_player(self):
         return self.players[self.turn]
 
-    
-    def get_goats_blocked(self, player):
-        """
-        Returns the number of goats that cannot jump for the given player.
-        """
-        blocked = 0
+    def get_goats_blocked(self, player: Player):
+        blocked_goats = 0
         for goat in player.goats:
-            if goat.blocked:
-                blocked += 1
-        return blocked
+            row, col = goat.get_location()
+            if row != -1:
+                stack = self.board.board[row][col]
+                if stack.size() > 1:
+                    blocked_goats += 1
+        return blocked_goats
 
+    def get_goats_per_player(self):
+        return [player.get_num_goats() for player in self.players]
 
-    def get_goats_per_player(self) -> List[int]:
-        '''Return a list that contains the number of goats per player.'''
-        goats_per_player = [len(player.goats) for player in self.players]
-        return goats_per_player
-
-
-    def set_phase(self, phase: int) -> None:
-        '''Sets the game phase'''
+    def set_phase(self, phase: int):
         self.phase = phase
 
+    def set_turn(self, turn: int):
+        self.turn = turn
 
-    def set_turn(self, turn: int) -> None:
-        '''Sets the game turn'''
-        self.turn = turn % len(self.players)
-
-
-    def add_player(self, player: Player) -> None:
-        '''Adds a player to the list of players in the game'''
+    def add_player(self, player: Player):
         self.players.append(player)
-
 
     def add_goat(self, row: int, column: str) -> None:
         '''Add goat to stack in given location (row, column).'''
-        # Check if the given location is valid
-        if row < 0 or row > self.rows or column not in self.columns:
-            raise Exception(f"Invalid location: ({row}, {column})")
-            
-        # Check if the stack at the given location is not full
-        if len(self.board[row][column]) >= self.stack_size:
-            raise Exception(f"Cannot add goat, stack at ({row}, {column}) is already full.")
-            
-        # Add a goat to the stack at the given location
-        self.board[row][column].append("goat")
 
+        self.board.check_row(row)
+        self.board.check_column(column)
 
+        if not self.check_starting_goat_placement(row):
+            raise Exception(f"Goat cannot be placed on row {row}.")
+
+        goat = Goat(self.get_current_player().color, row - 1, self.board.columns.index(column))
+        self.board.get_board()[row - 1][self.board.columns.index(column)].push(goat)
+        self.get_current_player().add_goat(goat)
 
     def move_sideways(self, move):
-        '''Executes sideways move if valid'''
-        player = self.get_current_player()
-        goat = player.get_selected_goat()
-        column = move[0][1]
-        current_row, current_col = goat.get_position()
+        '''
+        Executes sideways move if valid
+        '''
+        self.check_valid_move_format(move)
+        initial_loc, final_loc = move
 
-        if column == current_col:
-            print("Error: Cannot move goat to its current column")
-            return False
+        self.check_location(initial_loc)
+        self.check_location(final_loc)
 
-        if column not in VALID_COLUMNS:
-            print("Error: Invalid column")
-            return False
+        initial_row, initial_col = initial_loc
+        final_row, final_col = final_loc
 
-        if abs(VALID_COLUMNS.index(column) - VALID_COLUMNS.index(current_col)) > SIDE_JUMP_SIZE:
-            print("Error: Cannot move goat more than 1 column at a time")
-            return False
+        self.check_same_color(initial_row, initial_col)
 
-        # Check if the move is blocked by another goat
-        if self.board.is_blocked_by_goat(goat, move):
-            print("Error: Goat is blocked by another goat")
-            return False
+        if final_col == initial_col:
+            raise Exception("Cannot move goat to the same column.")
 
-        # Check if the move is blocked by an obstacle
-        if self.board.is_blocked_by_obstacle(current_row, current_col, column):
-            print("Error: Goat is blocked by an obstacle")
-            return False
+        self.board.check_column(final_col)
+        self.board.check_row(final_row)
 
-        goat.move_to(column, current_row)
-        self.board.update_board()
-        
-        return True
-    
+        initial_stack = self.board.get_board()[initial_row][self.board.columns.index(initial_col)]
+        final_stack = self.board.get_board()[final_row][self.board.columns.index(final_col)]
+
+        if not initial_stack.is_empty():
+            goat = initial_stack.peek()
+            if isinstance(goat, Goat):
+                if final_stack.is_empty():
+                    final_stack.push(initial_stack.pop())
+                else:
+                    raise Exception("Cannot move goat to a non-empty stack.")
+            else:
+                raise Exception("Cannot move goat from an empty stack.")
+        else:
+            raise Exception("Cannot move goat from an empty stack.")
+
 
     def move_forward(self, move, dice_outcome):
-        '''
-        Executes forward move if valid
-        '''
-        if self.current_turn != move[0]:
-            raise ValueError("It isn't this player's turn yet")
-        if dice_outcome not in range(1, 6):
-            raise ValueError("The dice outcome must be between 1 and 6")
-        player_goats = self.board.get_player_goats(move[0])
-        goat = player_goats[move[1]]
-        if goat.is_blocked():
-            raise ValueError("This goat is blocked and cannot be moved.")
-        new_row = goat.get_row() - (dice_outcome * FORWARD_JUMP_SIZE)
-        new_col_index = VALID_COLUMNS.index(goat.get_column())
-        if new_row not in range(self.board.get_height()):
-            raise ValueError("The goat cannot be moved to this row.")
-        if new_col_index not in range(self.board.get_width()):
-            raise ValueError("The goat cannot be moved to this column.")
+        '''Executes forward move if valid '''
 
-        new_col = VALID_COLUMNS[new_col_index]
-        self.board.move_goat(goat, new_row, new_col)
-        if new_row == 0:
-            goat.set_status(Goat.STATUS_BLOCKED)
-        elif self.board.is_adjacent_to_blocked(goat):
-            goat.set_status(Goat.STATUS_BLOCKED)
+        # Check that the move is valid
+        self.check_valid_move_format(move)
+
+        # Get the starting and ending locations of the move
+        start_row, start_col = move[0]
+        end_row, end_col = move[1]
+
+        # Check that the move is forward
+        if self.get_current_player().get_color() == "WHITE":
+            if end_row <= start_row:
+                raise Exception("Invalid move. Goats can only move forward.")
         else:
-            goat.set_status(Goat.STATUS_FREE)
-        self.increment_turn()
-        self.update_phase()
+            if end_row >= start_row:
+                raise Exception("Invalid move. Goats can only move forward.")
 
-    def check_row(self, row: int) -> None:
-        '''Checks if a row is valid'''
+        # Check that the move is within the bounds of the board
+        self.check_location((end_row, end_col))
 
-        if row > self._height or row < 0:
-            raise ValueError("Invalid row")
+        # Check that the goat being moved is of the current player's color
+        goat = self.board.get_board()[start_row - 1][self.board.columns.index(start_col)].peek()
+        if goat.get_color() != self.get_current_player().get_color():
+            raise Exception("Invalid move. You can only move your own goats.")
 
-    def check_valid_move_format(self, move: List) -> bool:
-        '''Checks if the given location is an appropriate list of tuples'''
-        if not isinstance(move, list) or len(move) != 2:
-            return False
-        
-        if not all(isinstance(coord, tuple) and len(coord) == 2 for coord in move):
-            return False
-        
-        if not all(isinstance(row, int) and isinstance(col, str) for row, col in move):
-            return False
-        
-        if not all(0 <= row < self.board.height and col in VALID_COLUMNS for row, col in move):
-            return False
-        
-        return True
+        # Check that the destination stack is not blocked
+        if self.board.get_board()[end_row - 1][self.board.columns.index(end_col)].size() >= 5:
+            raise Exception("Invalid move. Destination stack is blocked.")
+
+        # Check that the goat is jumping over other goats or empty stacks
+        jump_size = abs(end_row - start_row)
+        if jump_size == FORWARD_JUMP_SIZE:
+            if not self.check_jump(end_row, end_col):
+                raise Exception("Invalid move. You can only jump over your opponent's goats.")
+        elif jump_size == 2*FORWARD_JUMP_SIZE:
+            mid_row = (start_row + end_row) // 2
+            mid_col = start_col
+            if start_col == end_col:
+                goat = self.board.get_board()[mid_row - 1][self.board.columns.index(mid_col)].peek()
+                if goat is None or goat.get_color() == self.get_current_player().get_color():
+                    raise Exception("Invalid move. You can only jump over your opponent's goats.")
+            else:
+                mid_col = self.board.columns[start_col < end_col and start_col or end_col]
+                goat = self.board.get_board()[mid_row - 1][self.board.columns.index(mid_col)].peek()
+                if goat is None or goat.get_color() == self.get_current_player().get_color():
+                    raise Exception("Invalid move. You can only jump over your opponent's goats.")
+
+        # Move the goat to the destination stack
+        goat = self.board.get_board()[start_row - 1][self.board.columns.index(start_col)].pop()
+        self.board.get_board()[end_row - 1][self.board.columns.index(end_col)].push(goat)
+
+        # Check for winner or tie
+        if self.check_winner():
+            self.set_phase(3)
+        elif self.check_tie():
+            self.set_phase(4)
+        else:
+            # Update turn if the goat reached destination stack or the dice outcome was even
+            if end_row == self.height and self.get_current_player().get_color() == "WHITE":
+                self.set_turn((self.get_turn() + 1) % len(self.players))
+            elif end_row == 1 and self.get_current_player().get_color() == "BLACK":
+                self.set_turn((self.get_turn() + 1) % len(self.players))
+            elif dice_outcome % 2 == 0:
+                self.set_turn((self.get_turn() + 1) % len(self.players))
+
+
+    def check_row(self, row: int):
+        if not 1 <= row <= self.height:
+            raise Exception(f"Invalid row: {row}.")
+
+    def check_valid_move_format(self, move: List):
+        if len(move) != 2:
+            raise Exception("Invalid move format. Move should contain 2 tuples.")
+        for loc in move:
+            if not isinstance(loc, tuple) or len(loc) != 2:
+                raise Exception("Invalid move format. Each location must be a tuple with 2 elements.")
+
 
     def check_nonempty_row(self, row):
         """
-        Returns True if there are non-blocked goats in a given row, False otherwise
+        Returns True if there are non-blocked goats in the given row, otherwise False.
         """
-        for col in range(self.board.width):
-            cell = self.board.get_cell(row, col)
-            if isinstance(cell, Goat) and not cell.is_blocked():
+        for col in range(self.board.get_width()):
+            stack = self.board.get_board()[row - 1][col]
+            if not stack.is_empty():
+                top_item = stack.peek()
+                if isinstance(top_item, Goat) and top_item.get_color() == self.get_current_player().get_color():
+                    return True
+        return False
+
+
+
+    def check_starting_goat_placement(self, row):
+        if not 1 <= row <= self.height:
+            raise Exception(f"Invalid row: {row}.")
+        
+        row -= 1
+        min_height = min(stack.size() for stack in self.board.board[row])
+        
+        for j in range(self.width):
+            stack = self.board.board[row][j]
+            if stack.size() == min_height:
+                return True
+
+        return False
+
+
+
+
+    def check_winner(self):
+        for player in self.players:
+            destination_goats = 0
+            for goat in player.goats:
+                row, col = goat.get_location()
+                if row == self.height - 1:
+                    destination_goats += 1
+            if destination_goats >= WINNING_NUMBER_GOATS:
                 return True
         return False
 
-    def check_starting_goat_placement(self, row: int) -> bool:
-        '''Checks that goat is not placed in a high stack'''
-
-        # Check if there are any non-blocked goats in the row
-        if not self.check_nonempty_row(row):
-            return True
-        
-        # Get the topmost non-blocked goat in the row
-        topmost_goat = None
-        for goat in self.board.get_row(row):
-            if goat is not None and not goat.blocked:
-                topmost_goat = goat
-        if topmost_goat is None:
-            return True
-        
-        # Check if the topmost goat is at the bottom of the stack
-        return topmost_goat == self.board.get_top_goat(topmost_goat.row, topmost_goat.column)
-
-    def check_winner(self) -> bool:
-        '''
-            Returns whether one player has won by getting 
-            the necessary goats to the Destination
-        '''
-        for player in self.players:
-            counter = 0
-            for goat in player.goats:
-                row, col = goat.get_location()
-                if col == "I":
-                    counter += 1
-                if counter == 3:
-                    return player
-        return None
-    
     def check_tie(self) -> bool:
         '''
-        Returns whether there is a tie since no player has possible moves
+            Returns whether there is a tie since 
+            no player has possible moves
         '''
+        if self.get_phase() != 2:
+            return False
         for player in self.players:
-            if self.get_valid_moves(player):
+            if self.get_goats_blocked(player) < GOATS_PER_PLAYER:
                 return False
         return True
 
 if __name__ == '__main__':
 
     pass
-# game = Game(9, 6, [(3,"C"), (3,"B"), (4,"A"), (4,"G")])
-
-# game.add_player(Player("WHITE"))
-# player1 = Player("WHITE")
-# # game.add_player(Player("BLACK"))
-# # game.set_location(Player())
-# goat1 = Goat("WHITE", 2, "I")
-# goat2 = Goat("WHITE", 3, "I")
-# goat3 = Goat("WHITE", 4, "I")
-
-# player1.add_goat(goat1)
-# player1.add_goat(goat2)
-# player1.add_goat(goat3)
-# print(game)
-# # Check the winner
-# winner = game.check_winner()
-# if winner is not None:
-#     print(f"{winner} wins!")
-# else:
-#     print("No winner yet.")
-# # Check for a tie
-# tie = game.check_tie()
-# if tie:
-#     print("It's a tie!")
-# else:
-#     print("No tie yet.")
+    

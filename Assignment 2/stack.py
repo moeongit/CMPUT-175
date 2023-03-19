@@ -1,7 +1,6 @@
 # Author: Mohammed Al Robiay
 # Collaborators/References: None
 
-
 class Stack:
     def __init__(self):
         self.items = []
