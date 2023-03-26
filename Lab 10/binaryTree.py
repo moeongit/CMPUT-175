@@ -151,17 +151,16 @@ def findMinKey(tree):
  
     Returns: None if tree is None, otherwise a number
     '''
-    # do a comparsion for minimum to see if minimum is less then the element at the given node
     if tree == None:
         return None
     else:
         min = tree.getKey()
-        leftMin = findMinKey(tree.getLeft())
-        rightMin = findMinKey(tree.getRight())
-        if leftMin != None and leftMin < min:
-            min = leftMin
-        if rightMin != None and rightMin < min:
-            min = rightMin
+        left_min = findMinKey(tree.getLeft())
+        right_min = findMinKey(tree.getRight())
+        if left_min != None and left_min < min:
+            min = left_min
+        if right_min != None and right_min < min:
+            min = right_min
         return min
 
 def findMaxKey(tree):
@@ -176,12 +175,12 @@ def findMaxKey(tree):
         return None
     else:
         max = tree.getKey()
-        leftMax = findMaxKey(tree.getLeft())
-        rightMax = findMaxKey(tree.getRight())
-        if leftMax != None and leftMax > max:
-            max = leftMax
-        if rightMax != None and rightMax > max:
-            max = rightMax
+        left_max = findMaxKey(tree.getLeft())
+        right_max = findMaxKey(tree.getRight())
+        if left_max != None and left_max > max:
+            max = left_max
+        if right_max != None and right_max > max:
+            max = right_max
         return max  
     
 
@@ -200,17 +199,15 @@ def buildTree(inOrder, preOrder):
     ''' 
     if len(preOrder) == 0:
         return None
-    
-    else:
-        root = BinaryTree(preOrder[0])
-        rootIndex = inOrder.index(preOrder[0])
-        leftInOrder = inOrder[:rootIndex]
-        rightInOrder = inOrder[rootIndex + 1:]
-        leftPreOrder = preOrder[1:len(leftInOrder) + 1]
-        rightPreOrder = preOrder[len(leftInOrder) + 1:]
-        root.setLeft(buildTree(leftInOrder, leftPreOrder))
-        root.setRight(buildTree(rightInOrder, rightPreOrder))
-        return root
+    root = BinaryTree(preOrder[0])
+    root_index = inOrder.index(preOrder[0])
+    left_InOrder = inOrder[:root_index]
+    right_InOrder = inOrder[root_index + 1:]
+    left_PreOrder = preOrder[1:len(left_InOrder) + 1]
+    right_PreOrder = preOrder[len(left_InOrder) + 1:]
+    root.setLeft(buildTree(left_InOrder, left_PreOrder))
+    root.setRight(buildTree(right_InOrder, right_PreOrder))
+    return root
 
 
 ################################################################################
