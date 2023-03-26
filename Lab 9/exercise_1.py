@@ -7,11 +7,11 @@ import time
 def min_index(data, first, last):
     if first == last:
         return first
-    k = min_index(data, first + 1, last) 
-    if data[first] > data[k]:
+    i = min_index(data, first + 1, last) 
+    if data[first] > data[i]:
         return first
     else:
-        return k
+        return i
 
 def recursive_selection_sort(data, data_len, index = 0): 
     if index == data_len: 
@@ -35,10 +35,10 @@ def recursive_merge_sort(data):
     recursive_merge_sort(right_list)
     i, j, k = 0, 0, 0   
 
-    left_size = len(left_list)
-    right_size = len(right_list)
+    size_of_left = len(left_list)
+    size_of_right = len(right_list)
 
-    while i < left_size and j < right_size:
+    while i < size_of_left and j < size_of_right:
         if left_list[i] >= right_list[j]:
             data[k] = left_list[i]
             i += 1
@@ -46,15 +46,15 @@ def recursive_merge_sort(data):
             data[k] = right_list[j]
             j += 1
         k += 1
-    while i < left_size:
+    while i < size_of_left:
         data[k] = left_list[i]
         i += 1
         k += 1
-    while j < right_size:
+    while j < size_of_right:
         data[k] = right_list[j]
         k += 1
         j += 1
-    while i < left_size and j < right_size:
+    while i < size_of_left and j < size_of_right:
         if left_list[i] <= right_list[j]:
                 data[k] = left_list[i]
                 i += 1
@@ -63,12 +63,12 @@ def recursive_merge_sort(data):
             j += 1
             k += 1
 
-        while i < left_size:
+        while i < size_of_left:
             data[k] = left_list[i]
             i += 1
             k += 1
 
-        while j < right_size:
+        while j < size_of_right:
             data[k] = right_list[j]
             j += 1
             k += 1
