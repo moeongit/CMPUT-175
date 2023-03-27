@@ -130,9 +130,4 @@ if  __name__== "__main__":
     # Print the rsults execution time to sort a list of intergers already sorted in descending order 
     print('The execution time: to sort a descending list of integers in descending order.')
     print(' - Recursive selection sort: {}'.format(end_sel - start_sel))
-    print(' - Recursive merge sort: {}'.format(end_merge - start_merge))    
-
-
-
-      
-
+    print(' - Recursive merge sort: {}'.format(end_merge - start_merge))
