@@ -32,9 +32,6 @@ class Player:
         path_str = " -> ".join([f"{room_id} -> {door_id}" for room_id, door_id in self._path])
         print(path_str)
 
-    def clear_path(self):
-        self._path = []
-
     def add_to_path(self, room_id: int, door_id: str):
         self._path.append((room_id, door_id))
 
