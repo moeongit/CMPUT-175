@@ -4,4 +4,4 @@
 from game import Game
 
 game = Game()
-game.play('input.txt')
+game.play('castle.txt')
