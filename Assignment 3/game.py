@@ -116,7 +116,6 @@ class Game:
             
 
         if room.get_portal():            
-            player.clear_path()
             player.set_position(self._castle.get_entrance_id())
 
 
