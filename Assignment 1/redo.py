@@ -48,9 +48,14 @@ def cards(filename):
     cards = []
     with codecs.open(filename, "r", "utf-8") as file:
         for line in file:
-    
+            stats = line.strip().split(";")
+            if len(stats) == 5:
+                match, country, name, card_type, time = stats
+                cards.append({"match": match, "country": country, "name": name, "type": card_type, "time": time})
+    print(cards)
 
 def main():
     players_function = players("WC22Footballers.txt")
     matches_function = matches("WC22GroupMatches.txt")
+    cards_function = cards("WC22-YellowCards.txt")
 main()
